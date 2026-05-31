@@ -1,0 +1,263 @@
+/* ─── Light Theme Variables (Default / Day) ─── */
+:root {
+  --ink: #171717;
+  --body: #4d4d4d;
+  --muted: #777777;
+  --line: #eaeaea;
+  --soft: #fafafa;
+  --accent: #0070f3;
+  --accent-dim: rgba(0, 112, 243, 0.12);
+  --surface: rgba(255, 255, 255, 0.92);
+  --surface-solid: #ffffff;
+  --topbar-bg: rgba(255, 255, 255, 0.84);
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --card-inner: #fafafa;
+  --input-bg: #ffffff;
+  --input-border: #d4d4d4;
+  --btn-bg: #171717;
+  --btn-color: #ffffff;
+  --blob1: radial-gradient(circle, rgba(0, 112, 243, 0.55), rgba(0, 223, 216, 0.2), transparent 68%);
+  --blob2: radial-gradient(circle, rgba(255, 0, 128, 0.42), rgba(249, 203, 40, 0.18), transparent 70%);
+  --grid-line: rgba(0, 0, 0, 0.032);
+  --gradient-border: linear-gradient(135deg, rgba(0, 112, 243, 0.48), rgba(0, 223, 216, 0.18), rgba(255, 0, 128, 0.32));
+  --shadow: 0 24px 80px rgba(0, 0, 0, 0.08);
+  --selection-bg: #171717;
+  --selection-color: #ffffff;
+  --blob-opacity: 0.28;
+}
+
+/* ─── Dark Batman Theme Variables (Night) ─── */
+[data-theme="dark"] {
+  --ink: #e8e8e8;
+  --body: #a0a0a0;
+  --muted: #666666;
+  --line: #1e1e2a;
+  --soft: #0f0f18;
+  --accent: #f5c518;
+  --accent-dim: rgba(245, 197, 24, 0.15);
+  --surface: rgba(15, 15, 24, 0.92);
+  --surface-solid: #12121c;
+  --topbar-bg: rgba(10, 10, 15, 0.88);
+  --card-bg: rgba(15, 15, 24, 0.92);
+  --card-inner: #0d0d14;
+  --input-bg: #0d0d14;
+  --input-border: #333340;
+  --btn-bg: #f5c518;
+  --btn-color: #0a0a0f;
+  --blob1: radial-gradient(circle, rgba(245, 197, 24, 0.4), rgba(200, 150, 0, 0.15), transparent 68%);
+  --blob2: radial-gradient(circle, rgba(245, 197, 24, 0.25), rgba(180, 130, 0, 0.1), transparent 70%);
+  --grid-line: rgba(245, 197, 24, 0.03);
+  --gradient-border: linear-gradient(135deg, rgba(245, 197, 24, 0.5), rgba(200, 150, 0, 0.2), rgba(245, 197, 24, 0.3));
+  --shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+  --selection-bg: #f5c518;
+  --selection-color: #0a0a0f;
+  --blob-opacity: 0.2;
+}
+
+/* ─── Hidden utility ─── */
+[hidden] {
+  display: none !important;
+}
+
+/* ─── Topbar ─── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--line);
+  background: var(--topbar-bg);
+  backdrop-filter: blur(16px);
+  position: relative;
+  z-index: 1;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.brand-mark {
+  width: 24px;
+  height: 24px;
+  display: block;
+  flex: 0 0 auto;
+  border-radius: 6px;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.top-actions a {
+  border-radius: 999px;
+  padding: 8px 12px;
+  color: var(--body);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.top-actions a.active,
+.top-actions a:hover {
+  background: var(--btn-bg);
+  color: var(--btn-color);
+}
+
+/* ─── Eyebrow ─── */
+.eyebrow {
+  margin: 0 0 14px;
+  color: var(--accent);
+  font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* ─── Page shell / Error shell base ─── */
+.page-shell,
+.error-shell {
+  position: relative;
+  min-height: 100vh;
+  background:
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(180deg, var(--grid-line) 1px, transparent 1px),
+    radial-gradient(circle at 72% 12%, var(--accent-dim), transparent 28rem),
+    linear-gradient(180deg, var(--surface-solid) 0%, var(--soft) 100%);
+  background-size: 54px 54px, 54px 54px, auto, auto;
+  color: var(--ink);
+  animation: backgroundDrift 18s ease-in-out infinite alternate;
+  overflow: hidden;
+}
+
+.page-shell::before,
+.page-shell::after,
+.error-shell::before,
+.error-shell::after {
+  content: "";
+  position: fixed;
+  z-index: 0;
+  width: 42vw;
+  height: 42vw;
+  min-width: 420px;
+  min-height: 420px;
+  border-radius: 50%;
+  filter: blur(62px);
+  opacity: var(--blob-opacity);
+  pointer-events: none;
+}
+
+.page-shell::before,
+.error-shell::before {
+  left: -10vw;
+  top: 18vh;
+  background: var(--blob1);
+  animation: blobOne 16s ease-in-out infinite alternate;
+}
+
+.page-shell::after,
+.error-shell::after {
+  right: -12vw;
+  top: 8vh;
+  background: var(--blob2);
+  animation: blobTwo 18s ease-in-out infinite alternate;
+}
+
+/* ─── Buttons ─── */
+.btn-primary,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border-radius: 999px;
+  padding: 0 20px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.btn-primary {
+  background: var(--btn-bg);
+  color: var(--btn-color);
+  border: 1px solid var(--btn-bg);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="dark"] .btn-primary:hover,
+[data-theme="dark"] .btn-secondary:hover {
+  box-shadow: 0 4px 12px rgba(245, 197, 24, 0.2);
+}
+
+/* ─── Keyframe Animations ─── */
+@keyframes blobOne {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(18vw, -8vh, 0) scale(1.16); }
+}
+
+@keyframes blobTwo {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(-18vw, 14vh, 0) scale(1.12); }
+}
+
+@keyframes backgroundDrift {
+  0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+  100% { background-position: 18px 0, 0 18px, -90px 50px, 0 0; }
+}
+
+@keyframes ringSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes uploadPulse {
+  0%, 100% { opacity: 0; transform: scale(0.96); }
+  45% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes livePing {
+  0% { opacity: 0.8; transform: scale(0.45); }
+  100% { opacity: 0; transform: scale(1.45); }
+}
+
+@keyframes dialogIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes successPop {
+  0% { transform: scale(0.72); }
+  70% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .page-shell,
+  .page-shell::before,
+  .page-shell::after,
+  .error-shell,
+  .error-shell::before,
+  .error-shell::after {
+    animation: none;
+  }
+}

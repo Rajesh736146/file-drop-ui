@@ -1,340 +1,43 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Topbar from '../components/Topbar.astro';
 ---
 
 <Layout>
 	<main class="page-shell">
-		<header class="topbar">
-			<a class="brand" href="/" aria-label="Onlne File Share home">
-				<img class="brand-mark" src="/favicon.svg" alt="" width="24" height="24" />
-				<span>Onlne File Share</span>
-			</a>
-			<nav class="top-actions" aria-label="Primary">
-				<a href="/upload">Upload</a>
-				<a href="/retrieve">Retrieve</a>
-				<a class="active" href="/privacy">Privacy</a>
-				<a href="/contact">Contact</a>
-			</nav>
-		</header>
+		<Topbar active="privacy" />
 
 		<section class="privacy-hero">
 			<p class="eyebrow">Privacy Policy</p>
 			<h1>Privacy policy for temporary file sharing.</h1>
-			<p>
-				Onlne File Share is designed for temporary file handoff. Upload a file, receive an
-				access key, and share that key only with people who should be able to download it.
-			</p>
+			<p>Onlne File Share is designed for temporary file handoff. Upload a file, receive an access key, and share that key only with people who should be able to download it.</p>
 		</section>
 
 		<section class="privacy-grid" aria-label="Privacy details">
-			<article>
-				<span>01</span>
-				<h2>Uploaded files</h2>
-				<p>Files are stored so they can be downloaded by someone with the access key or file link.</p>
-			</article>
-			<article>
-				<span>02</span>
-				<h2>Access keys</h2>
-				<p>Treat access keys like temporary passwords. Anyone with a valid key may retrieve the file.</p>
-			</article>
-			<article>
-				<span>03</span>
-				<h2>Temporary links</h2>
-				<p>Download links include an expiration time. After expiry, the same link should no longer be used.</p>
-			</article>
-			<article>
-				<span>04</span>
-				<h2>Metadata</h2>
-				<p>The app displays basic file details such as name, size, content type, creation time, and expiry.</p>
-			</article>
-			<article>
-				<span>05</span>
-				<h2>What to avoid</h2>
-				<p>Do not upload sensitive documents unless you are comfortable sharing the generated key privately.</p>
-			</article>
-			<article>
-				<span>06</span>
-				<h2>Your responsibility</h2>
-				<p>Only share keys through trusted channels, and avoid posting them in public places.</p>
-			</article>
+			<article><span>01</span><h2>Uploaded files</h2><p>Files are stored so they can be downloaded by someone with the access key or file link.</p></article>
+			<article><span>02</span><h2>Access keys</h2><p>Treat access keys like temporary passwords. Anyone with a valid key may retrieve the file.</p></article>
+			<article><span>03</span><h2>Temporary links</h2><p>Download links include an expiration time. After expiry, the same link should no longer be used.</p></article>
+			<article><span>04</span><h2>Metadata</h2><p>The app displays basic file details such as name, size, content type, creation time, and expiry.</p></article>
+			<article><span>05</span><h2>What to avoid</h2><p>Do not upload sensitive documents unless you are comfortable sharing the generated key privately.</p></article>
+			<article><span>06</span><h2>Your responsibility</h2><p>Only share keys through trusted channels, and avoid posting them in public places.</p></article>
 		</section>
 	</main>
 </Layout>
 
 <style>
-	.page-shell {
-		--ink: #171717;
-		--body: #4d4d4d;
-		--muted: #777777;
-		--line: #eaeaea;
-		--blue: #0070f3;
-		position: relative;
-		min-height: 100vh;
-		background:
-			linear-gradient(90deg, rgba(0, 0, 0, 0.032) 1px, transparent 1px),
-			linear-gradient(180deg, rgba(0, 0, 0, 0.032) 1px, transparent 1px),
-			radial-gradient(circle at 72% 12%, rgba(0, 112, 243, 0.14), transparent 28rem),
-			linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
-		background-size: 54px 54px, 54px 54px, auto, auto;
-		color: var(--ink);
-		animation: backgroundDrift 18s ease-in-out infinite alternate;
-		overflow: hidden;
-	}
-
-	.page-shell::before,
-	.page-shell::after {
-		content: "";
-		position: fixed;
-		z-index: 0;
-		width: 42vw;
-		height: 42vw;
-		min-width: 420px;
-		min-height: 420px;
-		border-radius: 50%;
-		filter: blur(62px);
-		opacity: 0.28;
-		pointer-events: none;
-	}
-
-	.page-shell::before {
-		left: -10vw;
-		top: 18vh;
-		background: radial-gradient(circle, rgba(0, 112, 243, 0.55), rgba(0, 223, 216, 0.2), transparent 68%);
-		animation: blobOne 16s ease-in-out infinite alternate;
-	}
-
-	.page-shell::after {
-		right: -12vw;
-		top: 8vh;
-		background: radial-gradient(circle, rgba(255, 0, 128, 0.42), rgba(249, 203, 40, 0.18), transparent 70%);
-		animation: blobTwo 18s ease-in-out infinite alternate;
-	}
-
-	.topbar,
-	.privacy-hero,
-	.privacy-grid {
-		position: relative;
-		z-index: 1;
-	}
-
-	@keyframes backgroundDrift {
-		0% {
-			background-position:
-				0 0,
-				0 0,
-				0 0,
-				0 0;
-		}
-		100% {
-			background-position:
-				18px 0,
-				0 18px,
-				-80px 48px,
-				0 0;
-		}
-	}
-
-	@keyframes blobOne {
-		0% {
-			transform: translate3d(0, 0, 0) scale(1);
-		}
-		100% {
-			transform: translate3d(18vw, -8vh, 0) scale(1.16);
-		}
-	}
-
-	@keyframes blobTwo {
-		0% {
-			transform: translate3d(0, 0, 0) scale(1);
-		}
-		100% {
-			transform: translate3d(-18vw, 14vh, 0) scale(1.12);
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.page-shell,
-		.page-shell::before,
-		.page-shell::after {
-			animation: none;
-		}
-	}
-
-	.topbar {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		height: 64px;
-		padding: 0 24px;
-		border-bottom: 1px solid var(--line);
-		background: rgba(255, 255, 255, 0.84);
-		backdrop-filter: blur(16px);
-	}
-
-	.brand,
-	.top-actions {
-		display: flex;
-		align-items: center;
-	}
-
-	.brand {
-		gap: 10px;
-		color: var(--ink);
-		text-decoration: none;
-		font-size: 15px;
-		font-weight: 650;
-	}
-
-	.brand-mark {
-		width: 24px;
-		height: 24px;
-		display: block;
-		flex: 0 0 auto;
-		border-radius: 6px;
-	}
-
-	.top-actions {
-		gap: 6px;
-	}
-
-	.top-actions a {
-		border-radius: 999px;
-		padding: 8px 12px;
-		color: var(--body);
-		text-decoration: none;
-		font-size: 14px;
-	}
-
-	.top-actions a.active,
-	.top-actions a:hover {
-		background: #171717;
-		color: #ffffff;
-	}
-
-	.privacy-hero,
-	.privacy-grid {
-		width: min(1080px, calc(100% - 64px));
-		margin: 0 auto;
-	}
-
-	.privacy-hero {
-		padding: 72px 0 32px;
-	}
-
-	.eyebrow,
-	.privacy-grid span {
-		margin: 0;
-		color: var(--blue);
-		font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
-		font-size: 12px;
-		font-weight: 700;
-		text-transform: uppercase;
-	}
-
-	h1,
-	h2,
-	p {
-		margin-top: 0;
-	}
-
-	h1 {
-		max-width: 760px;
-		margin: 14px 0 18px;
-		font-size: clamp(46px, 7vw, 84px);
-		line-height: 0.96;
-		letter-spacing: 0;
-	}
-
-	.privacy-hero p:last-child {
-		max-width: 680px;
-		color: var(--body);
-		font-size: 18px;
-		line-height: 29px;
-	}
-
-	.privacy-grid {
-		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		margin-bottom: 40px;
-		border: 1px solid var(--line);
-		border-radius: 8px;
-		background: rgba(255, 255, 255, 0.94);
-		box-shadow: 0 24px 80px rgba(0, 0, 0, 0.08);
-	}
-
-	.privacy-grid article {
-		min-height: 230px;
-		padding: 22px;
-		border-right: 1px solid var(--line);
-		border-bottom: 1px solid var(--line);
-	}
-
-	.privacy-grid article:nth-child(3n) {
-		border-right: 0;
-	}
-
-	.privacy-grid article:nth-last-child(-n + 3) {
-		border-bottom: 0;
-	}
-
-	.privacy-grid h2 {
-		margin: 64px 0 10px;
-		font-size: 22px;
-		letter-spacing: 0;
-	}
-
-	.privacy-grid p {
-		margin: 0;
-		color: var(--muted);
-		font-size: 15px;
-		line-height: 23px;
-	}
-
-	@media (max-width: 860px) {
-		.privacy-grid {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
-
-		.privacy-grid article:nth-child(3n) {
-			border-right: 1px solid var(--line);
-		}
-
-		.privacy-grid article:nth-child(2n) {
-			border-right: 0;
-		}
-
-		.privacy-grid article:nth-last-child(-n + 3) {
-			border-bottom: 1px solid var(--line);
-		}
-
-		.privacy-grid article:nth-last-child(-n + 2) {
-			border-bottom: 0;
-		}
-	}
-
-	@media (max-width: 640px) {
-		.topbar {
-			padding: 0 16px;
-		}
-
-		.privacy-hero,
-		.privacy-grid {
-			width: calc(100% - 32px);
-		}
-
-		.privacy-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.privacy-grid article,
-		.privacy-grid article:nth-child(2n),
-		.privacy-grid article:nth-child(3n) {
-			border-right: 0;
-			border-bottom: 1px solid var(--line);
-		}
-
-		.privacy-grid article:last-child {
-			border-bottom: 0;
-		}
-	}
+	.privacy-hero, .privacy-grid { position: relative; z-index: 1; }
+	.privacy-hero, .privacy-grid { width: min(1080px, calc(100% - 64px)); margin: 0 auto; }
+	.privacy-hero { padding: 72px 0 32px; }
+	.privacy-grid span { margin: 0; color: var(--accent); font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; font-size: 12px; font-weight: 700; text-transform: uppercase; }
+	h1, h2, p { margin-top: 0; }
+	h1 { max-width: 760px; margin: 14px 0 18px; font-size: clamp(46px, 7vw, 84px); line-height: 0.96; color: var(--ink); }
+	.privacy-hero p:last-child { max-width: 680px; color: var(--body); font-size: 18px; line-height: 29px; }
+	.privacy-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 40px; border: 1px solid var(--line); border-radius: 8px; background: var(--card-bg); box-shadow: var(--shadow); }
+	.privacy-grid article { min-height: 230px; padding: 22px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+	.privacy-grid article:nth-child(3n) { border-right: 0; }
+	.privacy-grid article:nth-last-child(-n + 3) { border-bottom: 0; }
+	.privacy-grid h2 { margin: 64px 0 10px; font-size: 22px; color: var(--ink); }
+	.privacy-grid p { margin: 0; color: var(--muted); font-size: 15px; line-height: 23px; }
+	@media (max-width: 860px) { .privacy-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .privacy-grid article:nth-child(3n) { border-right: 1px solid var(--line); } .privacy-grid article:nth-child(2n) { border-right: 0; } .privacy-grid article:nth-last-child(-n + 3) { border-bottom: 1px solid var(--line); } .privacy-grid article:nth-last-child(-n + 2) { border-bottom: 0; } }
+	@media (max-width: 640px) { .privacy-hero, .privacy-grid { width: calc(100% - 32px); } .privacy-grid { grid-template-columns: 1fr; } .privacy-grid article, .privacy-grid article:nth-child(2n), .privacy-grid article:nth-child(3n) { border-right: 0; border-bottom: 1px solid var(--line); } .privacy-grid article:last-child { border-bottom: 0; } }
 </style>
