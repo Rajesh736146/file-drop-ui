@@ -108,7 +108,7 @@ const faqSchema = {
 
 		<section class="hero">
 			<div class="hero-copy">
-				<p class="eyebrow">Cloudflare R2 upload</p>
+				<p class="live-status"><span aria-hidden="true"></span>Server is awaiting</p>
 				<h1>Upload files. Share secure download keys.</h1>
 				<p class="hero-subtitle">
 					A clean file drop for quick sharing: choose a file, upload it securely, and share a
@@ -757,6 +757,41 @@ const faqSchema = {
 		font-weight: 700;
 	}
 
+	.live-status {
+		display: inline-flex;
+		align-items: center;
+		width: fit-content;
+		gap: 9px;
+		margin: 0 0 16px;
+		border: 1px solid #d8e9ff;
+		border-radius: 999px;
+		background: #f2f8ff;
+		color: var(--blue);
+		padding: 7px 11px;
+		font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+		font-size: 12px;
+		font-weight: 700;
+		text-transform: uppercase;
+	}
+
+	.live-status span {
+		position: relative;
+		width: 9px;
+		height: 9px;
+		border-radius: 50%;
+		background: #00a862;
+		box-shadow: 0 0 0 4px rgba(0, 168, 98, 0.14);
+	}
+
+	.live-status span::after {
+		content: "";
+		position: absolute;
+		inset: -7px;
+		border: 1px solid rgba(0, 168, 98, 0.45);
+		border-radius: inherit;
+		animation: livePing 1.5s ease-out infinite;
+	}
+
 	.hero-subtitle {
 		max-width: 500px;
 		margin-bottom: 24px;
@@ -938,6 +973,17 @@ const faqSchema = {
 		45% {
 			opacity: 1;
 			transform: scale(1);
+		}
+	}
+
+	@keyframes livePing {
+		0% {
+			opacity: 0.8;
+			transform: scale(0.45);
+		}
+		100% {
+			opacity: 0;
+			transform: scale(1.45);
 		}
 	}
 
