@@ -1,0 +1,67 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Terms and Conditions - Onlne File Share">
+	<main class="page-shell">
+		<header class="topbar">
+			<a class="brand" href="/" aria-label="Onlne File Share home">
+				<img class="brand-mark" src="/favicon.svg" alt="" width="24" height="24" />
+				<span>Onlne File Share</span>
+			</a>
+			<nav class="top-actions" aria-label="Primary">
+				<a href="/upload">Upload</a>
+				<a href="/retrieve">Retrieve</a>
+				<a href="/privacy">Privacy</a>
+				<a href="/contact">Contact</a>
+			</nav>
+		</header>
+
+		<section class="content-page">
+			<p class="eyebrow">Terms and conditions</p>
+			<h1>Use Onlne File Share responsibly.</h1>
+			<div class="content-card">
+				<h2>Acceptable use</h2>
+				<p>Do not upload illegal, harmful, abusive, infringing, or malicious content. You are responsible for the files you upload and the people you share access keys with.</p>
+				<h2>Temporary access</h2>
+				<p>Uploaded files are intended for temporary sharing. Download links and access keys may expire, change, or become unavailable.</p>
+				<h2>No sensitive public sharing</h2>
+				<p>Treat access keys like passwords. Do not post private keys publicly or share sensitive documents unless you understand the risks.</p>
+				<h2>Service availability</h2>
+				<p>The service is provided as a lightweight file sharing tool. Availability, upload behavior, and download access may depend on browser, network, storage, and API conditions.</p>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	.page-shell {
+		--ink: #171717;
+		--body: #4d4d4d;
+		--muted: #777777;
+		--line: #eaeaea;
+		--blue: #0070f3;
+		min-height: 100vh;
+		background:
+			linear-gradient(90deg, rgba(0, 0, 0, 0.032) 1px, transparent 1px),
+			linear-gradient(180deg, rgba(0, 0, 0, 0.032) 1px, transparent 1px),
+			radial-gradient(circle at 72% 12%, rgba(0, 112, 243, 0.14), transparent 28rem),
+			linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+		background-size: 54px 54px, 54px 54px, auto, auto;
+		color: var(--ink);
+	}
+	.topbar, .brand, .top-actions { display: flex; align-items: center; }
+	.topbar { justify-content: space-between; height: 64px; padding: 0 24px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.84); backdrop-filter: blur(16px); }
+	.brand { gap: 10px; color: var(--ink); text-decoration: none; font-size: 15px; font-weight: 650; }
+	.brand-mark { width: 24px; height: 24px; display: block; flex: 0 0 auto; border-radius: 6px; }
+	.top-actions { gap: 6px; }
+	.top-actions a { border-radius: 999px; padding: 8px 12px; color: var(--body); text-decoration: none; font-size: 14px; }
+	.top-actions a:hover { background: #171717; color: #ffffff; }
+	.content-page { width: min(900px, calc(100% - 48px)); margin: 0 auto; padding: 72px 0; }
+	.eyebrow { margin: 0 0 14px; color: var(--blue); font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; font-size: 12px; font-weight: 700; text-transform: uppercase; }
+	h1 { margin: 0 0 24px; font-size: clamp(44px, 7vw, 76px); line-height: 1; letter-spacing: 0; }
+	.content-card { border: 1px solid var(--line); border-radius: 8px; background: rgba(255,255,255,.94); box-shadow: 0 24px 80px rgba(0,0,0,.08); padding: 28px; }
+	.content-card h2 { margin: 0 0 8px; font-size: 22px; }
+	.content-card p { margin: 0 0 22px; color: var(--body); font-size: 17px; line-height: 29px; }
+	.content-card p:last-child { margin-bottom: 0; }
+</style>

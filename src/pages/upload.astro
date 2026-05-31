@@ -1,0 +1,943 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+	<main class="page-shell">
+		<header class="topbar">
+			<a class="brand" href="/" aria-label="Onlne File Share home">
+				<img class="brand-mark" src="/favicon.svg" alt="" width="24" height="24" />
+				<span>Onlne File Share</span>
+			</a>
+			<nav class="top-actions" aria-label="Primary">
+				<a class="active" href="/upload">Upload</a>
+				<a href="/retrieve">Retrieve</a>
+				<a href="/privacy">Privacy</a>
+			</nav>
+		</header>
+
+		<section class="upload-layout">
+			<div class="page-copy">
+				<p class="eyebrow">Secure upload</p>
+				<h1>Upload your file and share the access key.</h1>
+				<p>Choose a file, wait for the upload to finish, then send the generated key to anyone who needs the download.</p>
+			</div>
+
+			<section class="upload-card" aria-label="Upload file">
+				<div class="card-head">
+					<div>
+						<p>Upload target</p>
+						<strong>Secure file storage</strong>
+					</div>
+					<span id="modePill">Ready</span>
+				</div>
+
+				<label class="dropzone">
+					<input id="fileInput" type="file" />
+					<span class="upload-icon" aria-hidden="true"><span></span></span>
+					<strong id="fileTitle">Choose a file</strong>
+					<small id="fileMeta">Large files are handled reliably in the background.</small>
+				</label>
+
+				<div class="progress-wrap" aria-label="Upload progress">
+					<div class="progress-track">
+						<span id="progressBar"></span>
+					</div>
+					<p id="statusText">Waiting for a file.</p>
+				</div>
+
+				<div class="result-box" id="resultBox" hidden>
+					<div>
+						<small>Access key</small>
+						<strong id="accessKey">------</strong>
+					</div>
+					<a id="downloadLink" href="#" rel="noreferrer" data-download-link>Download file</a>
+				</div>
+			</section>
+		</section>
+
+		<div class="success-dialog" id="successDialog" hidden>
+			<div class="dialog-backdrop" data-close-dialog></div>
+			<section class="dialog-panel" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+				<button class="dialog-close" type="button" data-close-dialog aria-label="Close dialog">x</button>
+				<div class="dialog-status" aria-hidden="true"></div>
+				<p class="eyebrow">Upload complete</p>
+				<h2 id="successTitle">Your file is ready to share.</h2>
+				<p id="dialogFileMeta" class="dialog-meta">Copy the access key or share the download link.</p>
+
+				<div class="download-options">
+					<div class="option-row">
+						<label for="dialogAccessKey">Access key</label>
+						<div>
+							<input id="dialogAccessKey" readonly />
+							<button type="button" data-copy-target="dialogAccessKey">Copy key</button>
+						</div>
+					</div>
+					<div class="option-row">
+						<label for="dialogDownloadUrl">CDN download link</label>
+						<div>
+							<input id="dialogDownloadUrl" readonly />
+							<button type="button" data-copy-target="dialogDownloadUrl">Copy link</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="qr-section">
+					<img id="dialogQr" alt="QR code for download link" />
+					<div>
+						<strong>Scan to download</strong>
+						<span>QR code opens the generated CDN download link.</span>
+						<a id="dialogOpenLink" href="#" rel="noreferrer" data-download-link>Download file</a>
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<script>
+			const API_BASE = 'https://filedrop-nine.vercel.app';
+			const DIRECT_LIMIT = 5 * 1024 * 1024;
+			const fileInput = document.querySelector('#fileInput');
+			const fileTitle = document.querySelector('#fileTitle');
+			const fileMeta = document.querySelector('#fileMeta');
+			const modePill = document.querySelector('#modePill');
+			const progressBar = document.querySelector('#progressBar');
+			const statusText = document.querySelector('#statusText');
+			const resultBox = document.querySelector('#resultBox');
+			const accessKey = document.querySelector('#accessKey');
+			const downloadLink = document.querySelector('#downloadLink');
+			const successDialog = document.querySelector('#successDialog');
+			const dialogAccessKey = document.querySelector('#dialogAccessKey');
+			const dialogDownloadUrl = document.querySelector('#dialogDownloadUrl');
+			const dialogQr = document.querySelector('#dialogQr');
+			const dialogOpenLink = document.querySelector('#dialogOpenLink');
+			const dialogFileMeta = document.querySelector('#dialogFileMeta');
+
+			const formatBytes = (bytes) => {
+				if (bytes >= 1024 * 1024 * 1024) return `${(bytes / 1024 / 1024 / 1024).toFixed(2)} GB`;
+				if (bytes >= 1024 * 1024) return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
+				return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+			};
+
+			const startDownload = async (url, filename = 'download') => {
+				try {
+					const response = await fetch(url);
+					if (!response.ok) throw new Error('Download request failed.');
+					const blob = await response.blob();
+					const objectUrl = URL.createObjectURL(blob);
+					const anchor = document.createElement('a');
+					anchor.href = objectUrl;
+					anchor.download = filename;
+					document.body.append(anchor);
+					anchor.click();
+					anchor.remove();
+					URL.revokeObjectURL(objectUrl);
+				} catch {
+					window.location.href = url;
+				}
+			};
+
+			const bindDownloadLink = (link, filename) => {
+				if (!(link instanceof HTMLAnchorElement)) return;
+				link.download = filename || 'download';
+				link.dataset.filename = filename || 'download';
+			};
+
+			const readError = async (response) => {
+				try {
+					const data = await response.json();
+					return data.detail || `Request failed with ${response.status}`;
+				} catch {
+					return `Request failed with ${response.status}`;
+				}
+			};
+
+			const setProgress = (value) => {
+				if (progressBar) progressBar.style.inlineSize = `${Math.max(0, Math.min(100, value))}%`;
+			};
+
+			const setStatus = (message, mode = 'Ready') => {
+				if (statusText) statusText.textContent = message;
+				if (modePill) modePill.textContent = mode;
+			};
+
+			const openSuccessDialog = (data) => {
+				if (!successDialog) return;
+				if (dialogAccessKey) dialogAccessKey.value = data.access_key;
+				if (dialogDownloadUrl) dialogDownloadUrl.value = data.download_url;
+				if (dialogOpenLink) {
+					dialogOpenLink.href = data.download_url;
+					bindDownloadLink(dialogOpenLink, data.name);
+				}
+				if (dialogQr) {
+					dialogQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(data.download_url)}`;
+				}
+				if (dialogFileMeta) {
+					dialogFileMeta.textContent = `${data.name} - ${formatBytes(data.size)} - expires ${new Date(data.expires_at).toLocaleString()}`;
+				}
+				successDialog.hidden = false;
+				document.body.style.overflow = 'hidden';
+			};
+
+			const closeSuccessDialog = () => {
+				if (!successDialog) return;
+				successDialog.hidden = true;
+				document.body.style.overflow = '';
+			};
+
+			document.querySelectorAll('[data-close-dialog]').forEach((control) => {
+				control.addEventListener('click', closeSuccessDialog);
+			});
+
+			document.querySelectorAll('[data-copy-target]').forEach((button) => {
+				button.addEventListener('click', async () => {
+					const target = document.querySelector(`#${button.dataset.copyTarget}`);
+					if (!(target instanceof HTMLInputElement)) return;
+					await navigator.clipboard.writeText(target.value);
+					button.textContent = 'Copied';
+					window.setTimeout(() => {
+						button.textContent = button.dataset.copyTarget === 'dialogAccessKey' ? 'Copy key' : 'Copy link';
+					}, 1200);
+				});
+			});
+
+			document.addEventListener('keydown', (event) => {
+				if (event.key === 'Escape') closeSuccessDialog();
+			});
+
+			document.addEventListener('click', (event) => {
+				const link = event.target.closest('[data-download-link]');
+				if (!(link instanceof HTMLAnchorElement) || !link.href || link.href.endsWith('#')) return;
+				event.preventDefault();
+				startDownload(link.href, link.dataset.filename || link.download || 'download');
+			});
+
+			const uploadSmallFile = async (file) => {
+				const form = new FormData();
+				form.append('file', file);
+				setProgress(18);
+				const response = await fetch(`${API_BASE}/api/files/upload`, { method: 'POST', body: form });
+				if (!response.ok) throw new Error(await readError(response));
+				setProgress(100);
+				return response.json();
+			};
+
+			const uploadLargeFile = async (file) => {
+				setStatus('Preparing secure upload...', 'Uploading');
+				const initiateResponse = await fetch(`${API_BASE}/api/files/upload/initiate`, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						file_name: file.name,
+						file_size: file.size,
+						content_type: file.type || 'application/octet-stream',
+					}),
+				});
+				if (!initiateResponse.ok) throw new Error(await readError(initiateResponse));
+				const upload = await initiateResponse.json();
+				const parts = [];
+
+				for (let index = 0; index < upload.part_urls.length; index += 1) {
+					const start = index * upload.chunk_size;
+					const chunk = file.slice(start, Math.min(file.size, start + upload.chunk_size));
+					setStatus(`Uploading part ${index + 1} of ${upload.num_parts}...`, 'Uploading');
+					const partResponse = await fetch(upload.part_urls[index], { method: 'PUT', body: chunk });
+					if (!partResponse.ok) throw new Error(`Part ${index + 1} failed.`);
+					parts.push({
+						part_number: index + 1,
+						etag: partResponse.headers.get('ETag') || partResponse.headers.get('etag') || '',
+					});
+					setProgress(((index + 1) / upload.num_parts) * 86);
+				}
+
+				setStatus('Finalizing upload...', 'Finalizing');
+				const completeResponse = await fetch(`${API_BASE}/api/files/upload/complete`, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						upload_id: upload.upload_id,
+						r2_key: upload.r2_key,
+						file_name: file.name,
+						file_size: file.size,
+						content_type: file.type || 'application/octet-stream',
+						parts,
+					}),
+				});
+				if (!completeResponse.ok) throw new Error(await readError(completeResponse));
+				setProgress(100);
+				return completeResponse.json();
+			};
+
+			fileInput?.addEventListener('change', async (event) => {
+				const [file] = Array.from(event.target.files || []);
+				if (!file) return;
+
+				if (fileTitle) fileTitle.textContent = file.name;
+				if (fileMeta) fileMeta.textContent = `${formatBytes(file.size)} - ${file.type || 'application/octet-stream'}`;
+				if (resultBox) resultBox.hidden = true;
+				setProgress(0);
+
+				try {
+					const result = file.size < DIRECT_LIMIT ? await uploadSmallFile(file) : await uploadLargeFile(file);
+					if (resultBox) resultBox.hidden = false;
+					if (accessKey) accessKey.textContent = result.access_key;
+					if (downloadLink) {
+						downloadLink.href = result.download_url;
+						bindDownloadLink(downloadLink, result.name);
+					}
+					setStatus(`${result.name} uploaded. Link expires ${new Date(result.expires_at).toLocaleString()}.`, 'Done');
+					openSuccessDialog(result);
+				} catch (error) {
+					setStatus(error instanceof Error ? error.message : 'Upload failed.', 'Error');
+				}
+			});
+		</script>
+	</main>
+</Layout>
+
+<style>
+	.page-shell {
+		--ink: #171717;
+		--body: #4d4d4d;
+		--muted: #777777;
+		--line: #eaeaea;
+		--blue: #0070f3;
+		position: relative;
+		min-height: 100vh;
+		background:
+			linear-gradient(90deg, rgba(0, 0, 0, 0.032) 1px, transparent 1px),
+			linear-gradient(180deg, rgba(0, 0, 0, 0.032) 1px, transparent 1px),
+			radial-gradient(circle at 72% 18%, rgba(0, 112, 243, 0.14), transparent 26rem),
+			linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+		background-size: 54px 54px, 54px 54px, auto, auto;
+		color: var(--ink);
+		animation: backgroundDrift 18s ease-in-out infinite alternate;
+		overflow: hidden;
+	}
+
+	.page-shell::before,
+	.page-shell::after {
+		content: "";
+		position: fixed;
+		z-index: 0;
+		width: 42vw;
+		height: 42vw;
+		min-width: 420px;
+		min-height: 420px;
+		border-radius: 50%;
+		filter: blur(62px);
+		opacity: 0.28;
+		pointer-events: none;
+	}
+
+	.page-shell::before {
+		left: -10vw;
+		top: 18vh;
+		background: radial-gradient(circle, rgba(0, 112, 243, 0.55), rgba(0, 223, 216, 0.2), transparent 68%);
+		animation: blobOne 16s ease-in-out infinite alternate;
+	}
+
+	.page-shell::after {
+		right: -12vw;
+		top: 8vh;
+		background: radial-gradient(circle, rgba(255, 0, 128, 0.42), rgba(249, 203, 40, 0.18), transparent 70%);
+		animation: blobTwo 18s ease-in-out infinite alternate;
+	}
+
+	.topbar,
+	.upload-layout {
+		position: relative;
+		z-index: 1;
+	}
+
+	[hidden] {
+		display: none !important;
+	}
+
+	.topbar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 64px;
+		padding: 0 24px;
+		border-bottom: 1px solid var(--line);
+		background: rgba(255, 255, 255, 0.84);
+		backdrop-filter: blur(16px);
+	}
+
+	.brand,
+	.top-actions,
+	.card-head,
+	.result-box {
+		display: flex;
+		align-items: center;
+	}
+
+	.brand {
+		gap: 10px;
+		color: var(--ink);
+		text-decoration: none;
+		font-size: 15px;
+		font-weight: 650;
+	}
+
+	.brand-mark {
+		width: 24px;
+		height: 24px;
+		display: block;
+		flex: 0 0 auto;
+		border-radius: 6px;
+	}
+
+	.top-actions {
+		gap: 6px;
+	}
+
+	.top-actions a {
+		border-radius: 999px;
+		padding: 8px 12px;
+		color: var(--body);
+		text-decoration: none;
+		font-size: 14px;
+	}
+
+	.top-actions a.active,
+	.top-actions a:hover {
+		background: #171717;
+		color: #ffffff;
+	}
+
+	.upload-layout {
+		display: grid;
+		grid-template-columns: minmax(320px, 0.65fr) minmax(460px, 680px);
+		gap: 44px;
+		align-items: center;
+		width: min(1120px, calc(100% - 64px));
+		margin: 0 auto;
+		padding: 64px 0;
+	}
+
+	.eyebrow,
+	.card-head p,
+	.card-head span {
+		margin: 0;
+		font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+		font-size: 12px;
+		text-transform: uppercase;
+	}
+
+	.eyebrow {
+		margin-bottom: 14px;
+		color: var(--blue);
+		font-weight: 700;
+	}
+
+	h1,
+	p {
+		margin-top: 0;
+	}
+
+	h1 {
+		max-width: 500px;
+		margin-bottom: 18px;
+		font-size: clamp(44px, 6vw, 72px);
+		line-height: 1;
+		letter-spacing: 0;
+	}
+
+	.page-copy p:last-child {
+		max-width: 430px;
+		color: var(--body);
+		font-size: 18px;
+		line-height: 29px;
+	}
+
+	.upload-card {
+		border: 1px solid transparent;
+		border-radius: 8px;
+		background:
+			linear-gradient(#ffffff, #ffffff) padding-box,
+			linear-gradient(135deg, rgba(0, 112, 243, 0.52), rgba(0, 223, 216, 0.2), rgba(255, 0, 128, 0.3)) border-box;
+		box-shadow: 0 24px 80px rgba(0, 0, 0, 0.08);
+		padding: 18px;
+	}
+
+	.card-head {
+		justify-content: space-between;
+		gap: 16px;
+		margin-bottom: 14px;
+	}
+
+	.card-head p {
+		color: var(--muted);
+	}
+
+	.card-head strong {
+		display: block;
+		margin-top: 4px;
+		font-size: 18px;
+	}
+
+	.card-head span {
+		border: 1px solid #d8e9ff;
+		border-radius: 999px;
+		background: #f2f8ff;
+		color: var(--blue);
+		padding: 6px 10px;
+		font-weight: 700;
+	}
+
+	.dropzone {
+		position: relative;
+		display: grid;
+		place-items: center;
+		min-height: 430px;
+		border: 1px dashed #bdbdbd;
+		border-radius: 8px;
+		background:
+			radial-gradient(circle at 50% 48%, rgba(0, 112, 243, 0.09), transparent 46%),
+			linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+			linear-gradient(180deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+			#fafafa;
+		background-size: auto, 36px 36px, 36px 36px;
+		padding: 28px;
+		text-align: center;
+		cursor: pointer;
+		transition:
+			border-color 180ms ease,
+			transform 180ms ease;
+	}
+
+	.dropzone::before {
+		content: "";
+		position: absolute;
+		inset: 22px;
+		border: 1px solid rgba(0, 112, 243, 0.16);
+		border-radius: 8px;
+		opacity: 0;
+		transform: scale(0.96);
+		animation: uploadPulse 2.8s ease-in-out infinite;
+		pointer-events: none;
+	}
+
+	.dropzone:hover {
+		border-color: #171717;
+		transform: translateY(-1px);
+	}
+
+	.dropzone input {
+		position: absolute;
+		inline-size: 1px;
+		block-size: 1px;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.upload-icon {
+		position: relative;
+		display: grid;
+		place-items: center;
+		width: 88px;
+		height: 88px;
+		margin-bottom: 18px;
+		border: 0;
+		border-radius: 24px;
+		background: #ffffff;
+		box-shadow: 0 18px 42px rgba(0, 0, 0, 0.1);
+		overflow: hidden;
+		transform: translateZ(0);
+	}
+
+	.upload-icon span {
+		position: absolute;
+		inset: 3px;
+		z-index: 1;
+		border-radius: 21px;
+		background: #ffffff;
+	}
+
+	.upload-icon::before {
+		content: "";
+		position: absolute;
+		inset: -28px;
+		background: conic-gradient(from 0deg, #0070f3, #00dfd8, #ff0080, #f9cb28, #0070f3);
+		animation: ringSpin 5.5s linear infinite;
+		will-change: transform;
+	}
+
+	.upload-icon::after {
+		content: "";
+		position: absolute;
+		z-index: 2;
+		left: 50%;
+		top: 50%;
+		background: #171717;
+		transform: translate(-50%, -50%);
+	}
+
+	.upload-icon::after {
+		width: 28px;
+		height: 3px;
+	}
+
+	.upload-icon span::after {
+		content: "";
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		width: 3px;
+		height: 28px;
+		background: #171717;
+		transform: translate(-50%, -50%);
+	}
+
+	@keyframes ringSpin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	@keyframes uploadPulse {
+		0%,
+		100% {
+			opacity: 0;
+			transform: scale(0.96);
+		}
+		45% {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+
+	@keyframes backgroundDrift {
+		0% {
+			background-position:
+				0 0,
+				0 0,
+				0 0,
+				0 0;
+		}
+		100% {
+			background-position:
+				18px 0,
+				0 18px,
+				-90px 50px,
+				0 0;
+		}
+	}
+
+	@keyframes blobOne {
+		0% {
+			transform: translate3d(0, 0, 0) scale(1);
+		}
+		100% {
+			transform: translate3d(18vw, -8vh, 0) scale(1.16);
+		}
+	}
+
+	@keyframes blobTwo {
+		0% {
+			transform: translate3d(0, 0, 0) scale(1);
+		}
+		100% {
+			transform: translate3d(-18vw, 14vh, 0) scale(1.12);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.page-shell,
+		.page-shell::before,
+		.page-shell::after,
+		.upload-icon::before,
+		.dropzone::before {
+			animation: none;
+		}
+	}
+
+	.dropzone strong {
+		display: block;
+		max-width: 100%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		font-size: 30px;
+	}
+
+	.dropzone small {
+		display: block;
+		max-width: 380px;
+		margin-top: 8px;
+		color: var(--muted);
+		line-height: 21px;
+	}
+
+	.progress-wrap {
+		margin-top: 14px;
+	}
+
+	.progress-track {
+		height: 8px;
+		overflow: hidden;
+		border-radius: 999px;
+		background: #eeeeee;
+	}
+
+	.progress-track span {
+		display: block;
+		inline-size: 0%;
+		block-size: 100%;
+		border-radius: inherit;
+		background: #171717;
+		transition: inline-size 180ms ease;
+	}
+
+	.progress-wrap p {
+		margin: 10px 2px 0;
+		color: var(--muted);
+		font-size: 13px;
+		line-height: 20px;
+	}
+
+	.result-box {
+		justify-content: space-between;
+		gap: 14px;
+		margin-top: 14px;
+		border: 1px solid #dbeafe;
+		border-radius: 8px;
+		background: #f8fbff;
+		padding: 14px;
+	}
+
+	.result-box small,
+	.result-box strong {
+		display: block;
+	}
+
+	.result-box small {
+		color: var(--muted);
+	}
+
+	.result-box strong {
+		font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+		font-size: 24px;
+	}
+
+	.result-box a {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 38px;
+		border: 1px solid #171717;
+		border-radius: 6px;
+		background: #171717;
+		color: #ffffff;
+		padding: 0 14px;
+		text-decoration: none;
+		font-size: 14px;
+		font-weight: 500;
+		white-space: nowrap;
+	}
+
+	.success-dialog {
+		position: fixed;
+		inset: 0;
+		z-index: 50;
+		display: grid;
+		place-items: center;
+		padding: 24px;
+	}
+
+	.dialog-backdrop {
+		position: absolute;
+		inset: 0;
+		background: rgba(255, 255, 255, 0.72);
+		backdrop-filter: blur(18px);
+	}
+
+	.dialog-panel {
+		position: relative;
+		width: min(640px, 100%);
+		border: 1px solid transparent;
+		border-radius: 8px;
+		background:
+			linear-gradient(#ffffff, #ffffff) padding-box,
+			linear-gradient(135deg, rgba(0, 112, 243, 0.52), rgba(0, 223, 216, 0.2), rgba(255, 0, 128, 0.34)) border-box;
+		box-shadow: 0 30px 110px rgba(0, 0, 0, 0.18);
+		padding: 24px;
+		animation: dialogIn 260ms ease-out;
+	}
+
+	.dialog-close {
+		position: absolute;
+		top: 14px;
+		right: 14px;
+		display: grid;
+		place-items: center;
+		width: 30px;
+		height: 30px;
+		border: 1px solid var(--line);
+		border-radius: 50%;
+		background: #ffffff;
+		color: var(--muted);
+		font-size: 14px;
+	}
+
+	.dialog-status {
+		width: 54px;
+		height: 54px;
+		margin-bottom: 16px;
+		border-radius: 50%;
+		background: #171717;
+		position: relative;
+		animation: successPop 520ms ease-out;
+	}
+
+	.dialog-status::after {
+		content: "";
+		position: absolute;
+		left: 18px;
+		top: 14px;
+		width: 15px;
+		height: 24px;
+		border-right: 4px solid #ffffff;
+		border-bottom: 4px solid #ffffff;
+		transform: rotate(45deg);
+	}
+
+	.dialog-panel h2 {
+		margin: 0 34px 8px 0;
+		font-size: 34px;
+		line-height: 1.1;
+		letter-spacing: 0;
+	}
+
+	.dialog-meta {
+		margin: 0 0 18px;
+		color: var(--muted);
+		font-size: 14px;
+		line-height: 22px;
+	}
+
+	.download-options {
+		display: grid;
+		gap: 12px;
+	}
+
+	.option-row label {
+		display: block;
+		margin-bottom: 6px;
+		color: var(--muted);
+		font-size: 12px;
+		font-weight: 600;
+		text-transform: uppercase;
+	}
+
+	.option-row div {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 8px;
+	}
+
+	.option-row input {
+		min-width: 0;
+		height: 40px;
+		border: 1px solid #d4d4d4;
+		border-radius: 6px;
+		background: #fafafa;
+		padding: 0 12px;
+		color: var(--ink);
+		font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+		font-size: 13px;
+	}
+
+	.option-row button,
+	.qr-section a {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 40px;
+		border: 1px solid #171717;
+		border-radius: 6px;
+		background: #171717;
+		color: #ffffff;
+		padding: 0 12px;
+		text-decoration: none;
+		font-size: 13px;
+		font-weight: 500;
+		white-space: nowrap;
+	}
+
+	.qr-section {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		gap: 16px;
+		align-items: center;
+		margin-top: 18px;
+		border: 1px solid var(--line);
+		border-radius: 8px;
+		background: #fafafa;
+		padding: 14px;
+	}
+
+	.qr-section img {
+		width: 132px;
+		height: 132px;
+		border: 1px solid var(--line);
+		border-radius: 8px;
+		background: #ffffff;
+		padding: 8px;
+	}
+
+	.qr-section strong,
+	.qr-section span {
+		display: block;
+	}
+
+	.qr-section span {
+		margin: 6px 0 12px;
+		color: var(--muted);
+		font-size: 14px;
+		line-height: 21px;
+	}
+
+	@keyframes dialogIn {
+		from {
+			opacity: 0;
+			transform: translateY(12px) scale(0.98);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0) scale(1);
+		}
+	}
+
+	@keyframes successPop {
+		0% {
+			transform: scale(0.72);
+		}
+		70% {
+			transform: scale(1.08);
+		}
+		100% {
+			transform: scale(1);
+		}
+	}
+
+	@media (max-width: 860px) {
+		.upload-layout {
+			grid-template-columns: 1fr;
+			width: min(720px, calc(100% - 32px));
+		}
+	}
+
+	@media (max-width: 560px) {
+		.option-row div,
+		.qr-section {
+			grid-template-columns: 1fr;
+		}
+
+		.qr-section img {
+			width: 150px;
+			height: 150px;
+		}
+	}
+</style>

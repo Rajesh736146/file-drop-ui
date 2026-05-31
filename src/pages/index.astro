@@ -1,0 +1,1654 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const homeTitle = 'Online Fileshare - Free Online File Sharing and Secure File Transfer';
+const homeDescription =
+	'Use Onlne File Share as a free online fileshare tool for secure file transfer, cloud share links, sending large files, and anonymous filesharing with temporary download keys.';
+const homeKeywords =
+	'Online Fileshare, free online fileshare, file sharing, fle transfer, file transfer, file transfer online free, file transfer link, online file share without login, file sharing app, Send Anywhere file transfer, File transfer io, file transfer mobile to PC, online file transfer Mobile to PC, cloud share, cloud storage, send large files, share files, secure file transfer, anonymous filesharing, p2p sharing, webtransfer free, dropbox alternative, send big files, link sharing app';
+const faqItems = [
+	{
+		question: 'Why does my email say my file is too large to send, and how do I fix it?',
+		answer:
+			'Most email services limit attachments, so large videos, ZIP files, and folders can fail before they ever reach the recipient. With this online file share tool, you upload the file and send a download key or link instead of attaching the file directly to email.',
+	},
+	{
+		question: 'Can I use this online file share tool without creating an account?',
+		answer:
+			'Yes. Onlne File Share is designed as a free online fileshare workflow for quick transfers. You can upload a file, receive an access key, and share it without creating a traditional cloud storage account.',
+	},
+	{
+		question: 'How long do generated file-sharing links remain active?',
+		answer:
+			'Each upload returns an expiry time with the download details. The app shows that expiry after upload, so you can see how long the temporary link is expected to remain available before sharing it.',
+	},
+	{
+		question: 'How secure is my data when uploading files to an online transfer tool?',
+		answer:
+			'The app uses a secure file transfer flow with temporary access keys and download links. Treat every access key like a temporary password and share it only through trusted channels.',
+	},
+	{
+		question: 'Can I send an entire folder or multiple files at the same time?',
+		answer:
+			'The current upload flow is focused on reliable single-file transfer. If you need to share multiple files, compress them into a ZIP first or upload each file separately and share the generated keys.',
+	},
+	{
+		question: 'Is there a limit on the size of files I can upload?',
+		answer:
+			'The upload experience supports large files by handling bigger uploads in parts behind the scenes. If your file is too large for email, this file sharing workflow is built to help send big files through a browser.',
+	},
+	{
+		question: 'Can I send multiple files at once in a single link?',
+		answer:
+			'For one shareable link, place multiple items into one ZIP archive and upload that archive. This keeps the download simple for the recipient and works well for project folders, photos, and document bundles.',
+	},
+	{
+		question: 'How do I password protect a file link before sharing it?',
+		answer:
+			'Password protection is not shown as a current page control. For now, keep access keys private, share them only with intended recipients, and avoid posting download keys publicly.',
+	},
+	{
+		question: 'Does this file transfer tool work on mobile devices and smartphones?',
+		answer:
+			'Yes. The website is built for modern browsers, so you can use it on desktop or mobile to upload files, retrieve a shared access key, and open a download link.',
+	},
+	{
+		question: 'Can I track if my shared file has been downloaded?',
+		answer:
+			'Download tracking is not shown in the current interface. The tool focuses on fast upload, link sharing, QR code sharing, and retrieval through an access key.',
+	},
+	{
+		question: 'Can I use this as a file transfer online free tool?',
+		answer:
+			'Yes. Onlne File Share works as a file transfer online free tool for browser-based uploads and downloads. Upload a file, copy the generated access key or file transfer link, and share it with the recipient.',
+	},
+	{
+		question: 'How do I create a file transfer link?',
+		answer:
+			'Upload your file and wait for the success dialog. The app shows a downloadable link, an access key, and a QR code so you can share the file transfer link in email, chat, or another trusted channel.',
+	},
+	{
+		question: 'Can I transfer files from mobile to PC online?',
+		answer:
+			'Yes. You can upload from a mobile browser and open the same file on a PC by using the access key, download link, or QR code. This makes the tool useful for online file transfer mobile to PC workflows.',
+	},
+	{
+		question: 'Is this a Send Anywhere or File transfer io alternative?',
+		answer:
+			'Onlne File Share offers a simple alternative for users searching for Send Anywhere file transfer, File transfer io, or a lightweight file sharing app. It focuses on upload, access key sharing, QR code sharing, and quick retrieval.',
+	},
+];
+const faqSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	mainEntity: faqItems.map((item) => ({
+		'@type': 'Question',
+		name: item.question,
+		acceptedAnswer: {
+			'@type': 'Answer',
+			text: item.answer,
+		},
+	})),
+};
+---
+
+<Layout title={homeTitle} description={homeDescription} keywords={homeKeywords}>
+	<main class="app-shell">
+		<header class="topbar">
+			<a class="brand" href="/" aria-label="Onlne File Share home">
+				<img class="brand-mark" src="/favicon.svg" alt="" width="24" height="24" />
+				<span>Onlne File Share</span>
+			</a>
+			<nav class="top-actions" aria-label="Primary">
+				<a href="/upload">Upload</a>
+				<a href="/retrieve">Retrieve</a>
+				<a href="/privacy">Privacy</a>
+			</nav>
+		</header>
+
+		<section class="hero">
+			<div class="hero-copy">
+				<p class="eyebrow">Cloudflare R2 upload</p>
+				<h1>Upload files. Share secure download keys.</h1>
+				<p class="hero-subtitle">
+					A clean file drop for quick sharing: choose a file, upload it securely, and share a
+					short access key when it is ready.
+				</p>
+
+				<section class="lookup-card" id="retrieve" aria-label="Retrieve a file">
+					<div class="lookup-head">
+						<span class="lookup-icon" aria-hidden="true"></span>
+						<div>
+							<p class="eyebrow">Download lookup</p>
+							<h2>Have a key?</h2>
+						</div>
+					</div>
+					<form id="lookupForm" class="lookup-form">
+						<input id="lookupKey" type="text" placeholder="Enter access key or UUID" autocomplete="off" />
+						<button type="submit">Find file</button>
+					</form>
+					<p id="lookupStatus" class="lookup-status">Paste an access key to open its download link.</p>
+				</section>
+			</div>
+
+			<section class="upload-card" id="upload" aria-label="Upload file">
+				<div class="card-head">
+					<div>
+						<p>Storage target</p>
+						<strong>Secure file storage</strong>
+					</div>
+					<span id="modePill">Ready</span>
+				</div>
+
+				<label class="dropzone">
+					<input id="fileInput" type="file" />
+					<span class="upload-icon" aria-hidden="true"><span></span></span>
+					<strong id="fileTitle">Choose a file</strong>
+					<small id="fileMeta">Large files are handled reliably in the background.</small>
+				</label>
+
+				<div class="progress-wrap" aria-label="Upload progress">
+					<div class="progress-track">
+						<span id="progressBar"></span>
+					</div>
+					<p id="statusText">Waiting for a file.</p>
+				</div>
+
+				<div class="result-box" id="resultBox" hidden>
+					<div>
+						<small>Access key</small>
+						<strong id="accessKey">------</strong>
+					</div>
+					<a id="downloadLink" href="#" rel="noreferrer" data-download-link>Download file</a>
+				</div>
+			</section>
+		</section>
+
+		<section class="benefit-grid" id="privacy" aria-label="File sharing benefits">
+			<article>
+				<h3>Simple sharing</h3>
+				<p>Upload once and share a short access key with anyone who needs the file.</p>
+			</article>
+			<article>
+				<h3>Large-file ready</h3>
+				<p>Big uploads are split and sent safely so the experience stays stable.</p>
+			</article>
+			<article>
+				<h3>Fast downloads</h3>
+				<p>Files are stored on R2 and opened through temporary download links.</p>
+			</article>
+			<article>
+				<h3>Private by default</h3>
+				<p>Access keys expire, and the page only shows what people need to send or retrieve files.</p>
+			</article>
+		</section>
+
+		<section class="faq-section" aria-labelledby="faq-title">
+			<p class="eyebrow">File sharing FAQ</p>
+			<h2 id="faq-title">Questions about online file sharing</h2>
+			<div class="faq-list">
+				{
+					faqItems.map((item) => (
+						<article>
+							<h3>{item.question}</h3>
+							<p>{item.answer}</p>
+						</article>
+					))
+				}
+			</div>
+		</section>
+
+		<section class="seo-content" aria-labelledby="seo-title">
+			<p class="eyebrow">Online Fileshare</p>
+			<h2 id="seo-title">A free online fileshare tool for fast, secure file sharing</h2>
+			<div class="seo-columns">
+				<p>
+					Onlne File Share is built for anyone who needs a simple Online Fileshare experience
+					without the clutter of a traditional cloud storage dashboard. Instead of creating an
+					account, building folders, or inviting people into a workspace, you can upload a file,
+					receive a short access key, and share that key with the person who needs the download.
+					It is a free online fileshare workflow made for quick handoffs, temporary delivery,
+					and moments when you want a clean link sharing app that stays focused on one job:
+					move a file from you to someone else.
+				</p>
+				<p>
+					The tool works well for everyday file sharing, whether you need to send large files,
+					share files with a client, move a design export, deliver a video, or pass a document
+					to another device. Large uploads are handled in the background so the page can remain
+					responsive while the file is prepared. After upload, you get downloadable options,
+					a CDN download link, an access key, and a QR code that can be scanned from another
+					phone or computer. That makes Onlne File Share useful as a lightweight webtransfer
+					free option when email attachments are too small or when a chat app compresses media.
+				</p>
+				<p>
+					Many people search for a Dropbox alternative when they do not need a complete drive,
+					sync client, or team storage suite. Onlne File Share is not trying to replace every
+					cloud storage feature. It is closer to a focused cloud share utility: upload, share,
+					retrieve, and move on. This approach is useful for one-time transfers, anonymous
+					filesharing, and temporary link delivery. The interface also includes a retrieval page,
+					so someone with an access key can quickly look up the file and start the download
+					without learning a complicated product.
+				</p>
+				<p>
+					Security and clarity matter in any secure file transfer flow. Onlne File Share keeps
+					the visible experience straightforward by showing the access key, the generated
+					download link, the file details, and the expiry time after upload. Users should treat
+					access keys like temporary passwords and share them only through trusted channels.
+					Compared with p2p sharing tools, this cloud-backed flow is easier for recipients
+					who are not online at the same moment. Compared with full storage platforms, it is
+					faster for simple delivery. If you need to send big files, create a temporary cloud
+					share, or use a clean file transfer page from any browser, Onlne File Share gives you
+					the core workflow without extra friction.
+				</p>
+				<p>
+					The homepage, upload page, retrieval page, and privacy page are designed to make the
+					process understandable. Upload is for creating a shareable file. Retrieve is for people
+					who already have a key. Privacy explains what access keys mean and why you should keep
+					them private. Together, these pages make the website useful for both senders and
+					receivers. Whether you call it file sharing, file transfer, cloud share, anonymous
+					filesharing, or a webtransfer free alternative, the goal is the same: make sharing a
+					file feel fast, direct, and reliable.
+				</p>
+			</div>
+		</section>
+
+		<section class="related-searches" aria-labelledby="related-title">
+			<p class="eyebrow">People also search for</p>
+			<h2 id="related-title">Useful file transfer searches this tool supports</h2>
+			<div class="related-grid">
+				<article>
+					<h3>File transfer online free</h3>
+					<p>
+						Use the browser upload flow when you need a file transfer online free option that
+						creates a shareable key and download link without a complex account setup.
+					</p>
+				</article>
+				<article>
+					<h3>File transfer link</h3>
+					<p>
+						After upload, the success dialog shows a file transfer link, copy controls, and a QR
+						code so recipients can open the download from another device.
+					</p>
+				</article>
+				<article>
+					<h3>Online file share without login</h3>
+					<p>
+						Onlne File Share is designed for quick online file share without login use cases:
+						upload the file, copy the key, and send it through a trusted channel.
+					</p>
+				</article>
+				<article>
+					<h3>File sharing app</h3>
+					<p>
+						The website works like a lightweight file sharing app in the browser, with upload,
+						retrieve, privacy, QR sharing, and download actions.
+					</p>
+				</article>
+				<article>
+					<h3>File transfer mobile to PC</h3>
+					<p>
+						Upload from a phone, scan the QR code, or enter the access key on your computer for
+						online file transfer mobile to PC workflows.
+					</p>
+				</article>
+				<article>
+					<h3>Send Anywhere and File transfer io alternatives</h3>
+					<p>
+						If you are comparing Send Anywhere file transfer or File transfer io, this tool gives
+						you a focused web-based alternative for quick upload and retrieval.
+					</p>
+				</article>
+			</div>
+		</section>
+
+		<footer class="site-footer" aria-label="Footer navigation">
+			<a href="/about">About us</a>
+			<a href="/privacy">Privacy policy</a>
+			<a href="/terms">Terms & conditions</a>
+			<a href="/contact">Contact us</a>
+		</footer>
+
+		<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+		<div class="success-dialog" id="successDialog" hidden>
+			<div class="dialog-backdrop" data-close-dialog></div>
+			<section class="dialog-panel" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+				<button class="dialog-close" type="button" data-close-dialog aria-label="Close dialog">x</button>
+				<div class="dialog-status" aria-hidden="true"></div>
+				<p class="eyebrow">Upload complete</p>
+				<h2 id="successTitle">Your file is ready to share.</h2>
+				<p id="dialogFileMeta" class="dialog-meta">Copy the access key or share the download link.</p>
+
+				<div class="download-options">
+					<div class="option-row">
+						<label for="dialogAccessKey">Access key</label>
+						<div>
+							<input id="dialogAccessKey" readonly />
+							<button type="button" data-copy-target="dialogAccessKey">Copy key</button>
+						</div>
+					</div>
+					<div class="option-row">
+						<label for="dialogDownloadUrl">CDN download link</label>
+						<div>
+							<input id="dialogDownloadUrl" readonly />
+							<button type="button" data-copy-target="dialogDownloadUrl">Copy link</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="qr-section">
+					<img id="dialogQr" alt="QR code for download link" />
+					<div>
+						<strong>Scan to download</strong>
+						<span>QR code opens the generated CDN download link.</span>
+						<a id="dialogOpenLink" href="#" rel="noreferrer" data-download-link>Download file</a>
+					</div>
+				</div>
+			</section>
+		</div>
+	</main>
+
+	<script>
+		const API_BASE = 'https://filedrop-nine.vercel.app';
+		const DIRECT_LIMIT = 5 * 1024 * 1024;
+
+		const fileInput = document.querySelector('#fileInput');
+		const fileTitle = document.querySelector('#fileTitle');
+		const fileMeta = document.querySelector('#fileMeta');
+		const modePill = document.querySelector('#modePill');
+		const progressBar = document.querySelector('#progressBar');
+		const statusText = document.querySelector('#statusText');
+		const resultBox = document.querySelector('#resultBox');
+		const accessKey = document.querySelector('#accessKey');
+		const downloadLink = document.querySelector('#downloadLink');
+		const lookupForm = document.querySelector('#lookupForm');
+		const lookupKey = document.querySelector('#lookupKey');
+		const lookupStatus = document.querySelector('#lookupStatus');
+		const successDialog = document.querySelector('#successDialog');
+		const dialogAccessKey = document.querySelector('#dialogAccessKey');
+		const dialogDownloadUrl = document.querySelector('#dialogDownloadUrl');
+		const dialogQr = document.querySelector('#dialogQr');
+		const dialogOpenLink = document.querySelector('#dialogOpenLink');
+		const dialogFileMeta = document.querySelector('#dialogFileMeta');
+
+		const formatBytes = (bytes) => {
+			if (bytes >= 1024 * 1024 * 1024) return `${(bytes / 1024 / 1024 / 1024).toFixed(2)} GB`;
+			if (bytes >= 1024 * 1024) return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
+			return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+		};
+
+		const startDownload = async (url, filename = 'download') => {
+			try {
+				const response = await fetch(url);
+				if (!response.ok) throw new Error('Download request failed.');
+				const blob = await response.blob();
+				const objectUrl = URL.createObjectURL(blob);
+				const anchor = document.createElement('a');
+				anchor.href = objectUrl;
+				anchor.download = filename;
+				document.body.append(anchor);
+				anchor.click();
+				anchor.remove();
+				URL.revokeObjectURL(objectUrl);
+			} catch {
+				window.location.href = url;
+			}
+		};
+
+		const bindDownloadLink = (link, filename) => {
+			if (!(link instanceof HTMLAnchorElement)) return;
+			link.download = filename || 'download';
+			link.dataset.filename = filename || 'download';
+		};
+
+		const setProgress = (value) => {
+			if (progressBar) progressBar.style.inlineSize = `${Math.max(0, Math.min(100, value))}%`;
+		};
+
+		const setStatus = (message, mode = 'Ready') => {
+			if (statusText) statusText.textContent = message;
+			if (modePill) modePill.textContent = mode;
+		};
+
+		const uploadSmallFile = async (file) => {
+			const form = new FormData();
+			form.append('file', file);
+
+			setProgress(18);
+			const response = await fetch(`${API_BASE}/api/files/upload`, {
+				method: 'POST',
+				body: form,
+			});
+
+			if (!response.ok) throw new Error(await readError(response));
+			setProgress(100);
+			return response.json();
+		};
+
+		const uploadLargeFile = async (file) => {
+			setStatus('Creating multipart upload in R2...', 'Multipart');
+			const initiateResponse = await fetch(`${API_BASE}/api/files/upload/initiate`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					file_name: file.name,
+					file_size: file.size,
+					content_type: file.type || 'application/octet-stream',
+				}),
+			});
+
+			if (!initiateResponse.ok) throw new Error(await readError(initiateResponse));
+			const upload = await initiateResponse.json();
+			const parts = [];
+
+			for (let index = 0; index < upload.part_urls.length; index += 1) {
+				const start = index * upload.chunk_size;
+				const chunk = file.slice(start, Math.min(file.size, start + upload.chunk_size));
+				setStatus(`Uploading chunk ${index + 1} of ${upload.num_parts}...`, 'Multipart');
+
+				const partResponse = await fetch(upload.part_urls[index], {
+					method: 'PUT',
+					body: chunk,
+				});
+
+				if (!partResponse.ok) throw new Error(`Chunk ${index + 1} failed.`);
+
+				parts.push({
+					part_number: index + 1,
+					etag: partResponse.headers.get('ETag') || partResponse.headers.get('etag') || '',
+				});
+
+				setProgress(((index + 1) / upload.num_parts) * 86);
+			}
+
+			setStatus('Finalizing upload...', 'Complete');
+			const completeResponse = await fetch(`${API_BASE}/api/files/upload/complete`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					upload_id: upload.upload_id,
+					r2_key: upload.r2_key,
+					file_name: file.name,
+					file_size: file.size,
+					content_type: file.type || 'application/octet-stream',
+					parts,
+				}),
+			});
+
+			if (!completeResponse.ok) throw new Error(await readError(completeResponse));
+			setProgress(100);
+			return completeResponse.json();
+		};
+
+		const readError = async (response) => {
+			try {
+				const data = await response.json();
+				return data.detail || `Request failed with ${response.status}`;
+			} catch {
+				return `Request failed with ${response.status}`;
+			}
+		};
+
+		const showResult = (data) => {
+			if (resultBox) resultBox.hidden = false;
+			if (accessKey) accessKey.textContent = data.access_key;
+			if (downloadLink) {
+				downloadLink.href = data.download_url;
+				bindDownloadLink(downloadLink, data.name);
+			}
+			setStatus(`${data.name} uploaded. Link expires ${new Date(data.expires_at).toLocaleString()}.`, 'Done');
+			openSuccessDialog(data);
+		};
+
+		const openSuccessDialog = (data) => {
+			if (!successDialog) return;
+			if (dialogAccessKey) dialogAccessKey.value = data.access_key;
+			if (dialogDownloadUrl) dialogDownloadUrl.value = data.download_url;
+			if (dialogOpenLink) {
+				dialogOpenLink.href = data.download_url;
+				bindDownloadLink(dialogOpenLink, data.name);
+			}
+			if (dialogQr) {
+				dialogQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(data.download_url)}`;
+			}
+			if (dialogFileMeta) {
+				dialogFileMeta.textContent = `${data.name} - ${formatBytes(data.size)} - expires ${new Date(data.expires_at).toLocaleString()}`;
+			}
+			successDialog.hidden = false;
+			document.body.style.overflow = 'hidden';
+		};
+
+		const closeSuccessDialog = () => {
+			if (!successDialog) return;
+			successDialog.hidden = true;
+			document.body.style.overflow = '';
+		};
+
+		document.querySelectorAll('[data-close-dialog]').forEach((control) => {
+			control.addEventListener('click', closeSuccessDialog);
+		});
+
+		document.querySelectorAll('[data-copy-target]').forEach((button) => {
+			button.addEventListener('click', async () => {
+				const target = document.querySelector(`#${button.dataset.copyTarget}`);
+				if (!(target instanceof HTMLInputElement)) return;
+				await navigator.clipboard.writeText(target.value);
+				button.textContent = 'Copied';
+				window.setTimeout(() => {
+					button.textContent = button.dataset.copyTarget === 'dialogAccessKey' ? 'Copy key' : 'Copy link';
+				}, 1200);
+			});
+		});
+
+		document.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape') closeSuccessDialog();
+		});
+
+		document.addEventListener('click', (event) => {
+			const link = event.target.closest('[data-download-link]');
+			if (!(link instanceof HTMLAnchorElement) || !link.href || link.href.endsWith('#')) return;
+			event.preventDefault();
+			startDownload(link.href, link.dataset.filename || link.download || 'download');
+		});
+
+		fileInput?.addEventListener('change', async (event) => {
+			const [file] = Array.from(event.target.files || []);
+			if (!file) return;
+
+			if (fileTitle) fileTitle.textContent = file.name;
+			if (fileMeta) fileMeta.textContent = `${formatBytes(file.size)} • ${file.type || 'application/octet-stream'}`;
+			if (resultBox) resultBox.hidden = true;
+			setProgress(0);
+
+			try {
+				const isDirect = file.size < DIRECT_LIMIT;
+				setStatus(isDirect ? 'Uploading directly...' : 'Preparing multipart upload...', isDirect ? 'Direct' : 'Multipart');
+				const result = isDirect ? await uploadSmallFile(file) : await uploadLargeFile(file);
+				showResult(result);
+			} catch (error) {
+				setStatus(error instanceof Error ? error.message : 'Upload failed.', 'Error');
+			}
+		});
+
+		lookupForm?.addEventListener('submit', async (event) => {
+			event.preventDefault();
+			const key = lookupKey?.value.trim();
+			if (!key || !lookupStatus) return;
+
+			lookupStatus.textContent = 'Looking up file...';
+			try {
+				const response = await fetch(`${API_BASE}/api/files/${encodeURIComponent(key)}`);
+				if (!response.ok) throw new Error(await readError(response));
+				const file = await response.json();
+				lookupStatus.innerHTML = '';
+
+				const link = document.createElement('a');
+				link.href = file.download_url;
+				link.rel = 'noreferrer';
+				link.download = file.name;
+				link.dataset.downloadLink = '';
+				link.dataset.filename = file.name;
+				link.textContent = `Download ${file.name} (${formatBytes(file.size)})`;
+				lookupStatus.append(link);
+			} catch (error) {
+				lookupStatus.textContent = error instanceof Error ? error.message : 'File lookup failed.';
+			}
+		});
+	</script>
+</Layout>
+
+<style>
+	.app-shell {
+		--ink: #171717;
+		--body: #4d4d4d;
+		--muted: #777777;
+		--line: #eaeaea;
+		--soft: #fafafa;
+		--blue: #0070f3;
+		--cyan: #00dfd8;
+		--pink: #ff0080;
+		position: relative;
+		min-height: 100vh;
+		background:
+			linear-gradient(90deg, rgba(0, 0, 0, 0.032) 1px, transparent 1px),
+			linear-gradient(180deg, rgba(0, 0, 0, 0.032) 1px, transparent 1px),
+			radial-gradient(circle at 76% 10%, rgba(0, 112, 243, 0.16), transparent 26rem),
+			radial-gradient(circle at 16% 84%, rgba(255, 0, 128, 0.08), transparent 22rem),
+			linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+		background-size: 54px 54px, 54px 54px, auto, auto, auto;
+		color: var(--ink);
+		animation: backgroundDrift 18s ease-in-out infinite alternate;
+		overflow: hidden;
+	}
+
+	.app-shell::before,
+	.app-shell::after {
+		content: "";
+		position: fixed;
+		z-index: 0;
+		width: 42vw;
+		height: 42vw;
+		min-width: 420px;
+		min-height: 420px;
+		border-radius: 50%;
+		filter: blur(62px);
+		opacity: 0.28;
+		pointer-events: none;
+	}
+
+	.app-shell::before {
+		left: -10vw;
+		top: 18vh;
+		background: radial-gradient(circle, rgba(0, 112, 243, 0.55), rgba(0, 223, 216, 0.2), transparent 68%);
+		animation: blobOne 16s ease-in-out infinite alternate;
+	}
+
+	.app-shell::after {
+		right: -12vw;
+		top: 8vh;
+		background: radial-gradient(circle, rgba(255, 0, 128, 0.42), rgba(249, 203, 40, 0.18), transparent 70%);
+		animation: blobTwo 18s ease-in-out infinite alternate;
+	}
+
+	.topbar,
+	.hero,
+	.benefit-grid {
+		position: relative;
+		z-index: 1;
+	}
+
+	[hidden] {
+		display: none !important;
+	}
+
+	.topbar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 64px;
+		padding: 0 24px;
+		border-bottom: 1px solid var(--line);
+		background: rgba(255, 255, 255, 0.84);
+		backdrop-filter: blur(16px);
+	}
+
+	.brand,
+	.top-actions,
+	.card-head,
+	.result-box,
+	.lookup-form {
+		display: flex;
+		align-items: center;
+	}
+
+	.brand {
+		gap: 10px;
+		color: var(--ink);
+		text-decoration: none;
+		font-size: 15px;
+		font-weight: 650;
+	}
+
+	.brand-mark {
+		width: 24px;
+		height: 24px;
+		display: block;
+		flex: 0 0 auto;
+		border-radius: 6px;
+	}
+
+	.top-actions {
+		gap: 6px;
+	}
+
+	.top-actions a {
+		border-radius: 999px;
+		padding: 8px 12px;
+		color: var(--body);
+		text-decoration: none;
+		font-size: 14px;
+	}
+
+	.top-actions a:hover {
+		background: #f2f2f2;
+		color: var(--ink);
+	}
+
+	.hero {
+		display: grid;
+		grid-template-columns: minmax(360px, 0.9fr) minmax(420px, 520px);
+		gap: 44px;
+		align-items: stretch;
+		width: min(1080px, calc(100% - 64px));
+		margin: 0 auto;
+		padding: 48px 0 34px;
+	}
+
+	.eyebrow,
+	.card-head p,
+	.card-head span {
+		margin: 0;
+		font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+		font-size: 12px;
+		letter-spacing: 0;
+		text-transform: uppercase;
+	}
+
+	.eyebrow {
+		margin-bottom: 14px;
+		color: var(--blue);
+		font-weight: 700;
+	}
+
+	h1,
+	h2,
+	h3,
+	p {
+		margin-top: 0;
+	}
+
+	h1 {
+		max-width: 560px;
+		margin-bottom: 18px;
+		font-size: clamp(42px, 4.8vw, 60px);
+		line-height: 1;
+		letter-spacing: 0;
+		font-weight: 700;
+	}
+
+	.hero-subtitle {
+		max-width: 500px;
+		margin-bottom: 24px;
+		color: var(--body);
+		font-size: 18px;
+		line-height: 29px;
+	}
+
+	.upload-card,
+	.hero-copy,
+	.lookup-card,
+	.benefit-grid {
+		border: 1px solid var(--line);
+		border-radius: 8px;
+		background: rgba(255, 255, 255, 0.92);
+		box-shadow: 0 24px 80px rgba(0, 0, 0, 0.08);
+	}
+
+	.hero-copy {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		min-height: 520px;
+		padding: 28px;
+	}
+
+	.upload-card {
+		position: relative;
+		min-height: 520px;
+		padding: 16px;
+		background:
+			linear-gradient(#ffffff, #ffffff) padding-box,
+			linear-gradient(135deg, rgba(0, 112, 243, 0.48), rgba(0, 223, 216, 0.18), rgba(255, 0, 128, 0.32)) border-box;
+		border-color: transparent;
+	}
+
+	.card-head {
+		justify-content: space-between;
+		gap: 16px;
+		margin-bottom: 14px;
+	}
+
+	.card-head p {
+		color: var(--muted);
+	}
+
+	.card-head strong {
+		display: block;
+		margin-top: 4px;
+		font-size: 18px;
+	}
+
+	.card-head span {
+		border: 1px solid #d8e9ff;
+		border-radius: 999px;
+		background: #f2f8ff;
+		color: var(--blue);
+		padding: 6px 10px;
+		font-weight: 700;
+	}
+
+	.dropzone {
+		position: relative;
+		display: grid;
+		place-items: center;
+		min-height: 336px;
+		border: 1px dashed #bdbdbd;
+		border-radius: 8px;
+		background:
+			radial-gradient(circle at 50% 48%, rgba(0, 112, 243, 0.09), transparent 46%),
+			linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+			linear-gradient(180deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+			#fafafa;
+		background-size: auto, 36px 36px, 36px 36px;
+		padding: 28px;
+		text-align: center;
+		cursor: pointer;
+		transition:
+			border-color 180ms ease,
+			background-color 180ms ease,
+			transform 180ms ease;
+	}
+
+	.dropzone::before {
+		content: "";
+		position: absolute;
+		inset: 18px;
+		border: 1px solid rgba(0, 112, 243, 0.16);
+		border-radius: 8px;
+		opacity: 0;
+		transform: scale(0.96);
+		animation: uploadPulse 2.8s ease-in-out infinite;
+		pointer-events: none;
+	}
+
+	.dropzone:hover {
+		border-color: #171717;
+		transform: translateY(-1px);
+	}
+
+	.dropzone input {
+		position: absolute;
+		inline-size: 1px;
+		block-size: 1px;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.upload-icon {
+		position: relative;
+		display: grid;
+		place-items: center;
+		width: 76px;
+		height: 76px;
+		margin-bottom: 16px;
+		border: 0;
+		border-radius: 24px;
+		background: #ffffff;
+		box-shadow: 0 18px 42px rgba(0, 0, 0, 0.1);
+		overflow: hidden;
+		transform: translateZ(0);
+	}
+
+	.upload-icon span {
+		position: absolute;
+		inset: 3px;
+		z-index: 1;
+		border-radius: 21px;
+		background: #ffffff;
+	}
+
+	.upload-icon::before {
+		content: "";
+		position: absolute;
+		inset: -26px;
+		background: conic-gradient(from 0deg, var(--blue), var(--cyan), var(--pink), #f9cb28, var(--blue));
+		animation: ringSpin 5.5s linear infinite;
+		will-change: transform;
+	}
+
+	.upload-icon::after {
+		content: "";
+		position: absolute;
+		z-index: 2;
+		left: 50%;
+		top: 50%;
+		background: #171717;
+		transform: translate(-50%, -50%);
+	}
+
+	.upload-icon::after {
+		width: 28px;
+		height: 3px;
+	}
+
+	.upload-icon span::after {
+		content: "";
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		width: 3px;
+		height: 28px;
+		background: #171717;
+		transform: translate(-50%, -50%);
+	}
+
+	@keyframes ringSpin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	@keyframes uploadPulse {
+		0%,
+		100% {
+			opacity: 0;
+			transform: scale(0.96);
+		}
+		45% {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+
+	@keyframes backgroundDrift {
+		0% {
+			background-position:
+				0 0,
+				0 0,
+				0 0,
+				0 0,
+				0 0;
+		}
+		100% {
+			background-position:
+				18px 0,
+				0 18px,
+				-90px 50px,
+				70px -45px,
+				0 0;
+		}
+	}
+
+	@keyframes blobOne {
+		0% {
+			transform: translate3d(0, 0, 0) scale(1);
+		}
+		100% {
+			transform: translate3d(18vw, -8vh, 0) scale(1.16);
+		}
+	}
+
+	@keyframes blobTwo {
+		0% {
+			transform: translate3d(0, 0, 0) scale(1);
+		}
+		100% {
+			transform: translate3d(-18vw, 14vh, 0) scale(1.12);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.app-shell,
+		.app-shell::before,
+		.app-shell::after,
+		.upload-icon::before,
+		.dropzone::before {
+			animation: none;
+		}
+	}
+
+	.dropzone strong {
+		display: block;
+		max-width: 100%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		font-size: 26px;
+		font-weight: 750;
+	}
+
+	.dropzone small {
+		display: block;
+		max-width: 360px;
+		margin-top: 8px;
+		color: var(--muted);
+		line-height: 21px;
+	}
+
+	.progress-wrap {
+		margin-top: 14px;
+	}
+
+	.progress-track {
+		height: 8px;
+		overflow: hidden;
+		border-radius: 999px;
+		background: #eeeeee;
+	}
+
+	.progress-track span {
+		display: block;
+		inline-size: 0%;
+		block-size: 100%;
+		border-radius: inherit;
+		background: #171717;
+		transition: inline-size 180ms ease;
+	}
+
+	.progress-wrap p,
+	.lookup-status {
+		margin: 10px 2px 0;
+		color: var(--muted);
+		font-size: 13px;
+		line-height: 20px;
+	}
+
+	.result-box {
+		justify-content: space-between;
+		gap: 14px;
+		margin-top: 14px;
+		border: 1px solid #dbeafe;
+		border-radius: 8px;
+		background: #f8fbff;
+		padding: 14px;
+	}
+
+	.result-box small,
+	.result-box strong {
+		display: block;
+	}
+
+	.result-box small {
+		color: var(--muted);
+	}
+
+	.result-box strong {
+		margin-top: 3px;
+		font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+		font-size: 22px;
+	}
+
+	.result-box a,
+	.lookup-form button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 36px;
+		border: 1px solid #171717;
+		border-radius: 6px;
+		background: #171717;
+		color: #ffffff;
+		padding: 0 13px;
+		text-decoration: none;
+		font-size: 14px;
+		font-weight: 500;
+		white-space: nowrap;
+	}
+
+	.lookup-card {
+		max-width: 520px;
+		padding: 16px;
+		box-shadow: none;
+	}
+
+	.lookup-head {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		margin-bottom: 14px;
+	}
+
+	.lookup-head .eyebrow {
+		margin-bottom: 4px;
+		color: var(--muted);
+	}
+
+	.lookup-head h2 {
+		margin: 0;
+		font-size: 24px;
+		letter-spacing: 0;
+	}
+
+	.lookup-icon {
+		position: relative;
+		display: grid;
+		place-items: center;
+		flex: 0 0 auto;
+		width: 42px;
+		height: 42px;
+		border-radius: 50%;
+		background: #171717;
+	}
+
+	.lookup-icon::before {
+		content: "";
+		width: 15px;
+		height: 15px;
+		border-right: 3px solid #ffffff;
+		border-bottom: 3px solid #ffffff;
+		transform: translateY(-3px) rotate(45deg);
+	}
+
+	.benefit-grid {
+		width: min(1120px, calc(100% - 48px));
+		margin: 0 auto 32px;
+	}
+
+	.lookup-form {
+		gap: 10px;
+	}
+
+	.lookup-form input {
+		width: 100%;
+		height: 46px;
+		border: 1px solid #d4d4d4;
+		border-radius: 6px;
+		background: #ffffff;
+		padding: 0 12px;
+		color: var(--ink);
+	}
+
+	.lookup-form button {
+		min-width: 86px;
+	}
+
+	.lookup-status {
+		margin-top: 10px;
+	}
+
+	.lookup-status a {
+		color: var(--blue);
+		font-weight: 600;
+	}
+
+	.success-dialog {
+		position: fixed;
+		inset: 0;
+		z-index: 50;
+		display: grid;
+		place-items: center;
+		padding: 24px;
+	}
+
+	.dialog-backdrop {
+		position: absolute;
+		inset: 0;
+		background: rgba(255, 255, 255, 0.72);
+		backdrop-filter: blur(18px);
+	}
+
+	.dialog-panel {
+		position: relative;
+		width: min(640px, 100%);
+		border: 1px solid transparent;
+		border-radius: 8px;
+		background:
+			linear-gradient(#ffffff, #ffffff) padding-box,
+			linear-gradient(135deg, rgba(0, 112, 243, 0.52), rgba(0, 223, 216, 0.2), rgba(255, 0, 128, 0.34)) border-box;
+		box-shadow: 0 30px 110px rgba(0, 0, 0, 0.18);
+		padding: 24px;
+		animation: dialogIn 260ms ease-out;
+	}
+
+	.dialog-close {
+		position: absolute;
+		top: 14px;
+		right: 14px;
+		display: grid;
+		place-items: center;
+		width: 30px;
+		height: 30px;
+		border: 1px solid var(--line);
+		border-radius: 50%;
+		background: #ffffff;
+		color: var(--muted);
+		font-size: 14px;
+	}
+
+	.dialog-status {
+		width: 54px;
+		height: 54px;
+		margin-bottom: 16px;
+		border-radius: 50%;
+		background: #171717;
+		position: relative;
+		animation: successPop 520ms ease-out;
+	}
+
+	.dialog-status::after {
+		content: "";
+		position: absolute;
+		left: 18px;
+		top: 14px;
+		width: 15px;
+		height: 24px;
+		border-right: 4px solid #ffffff;
+		border-bottom: 4px solid #ffffff;
+		transform: rotate(45deg);
+	}
+
+	.dialog-panel h2 {
+		margin: 0 34px 8px 0;
+		font-size: 34px;
+		line-height: 1.1;
+		letter-spacing: 0;
+	}
+
+	.dialog-meta {
+		margin: 0 0 18px;
+		color: var(--muted);
+		font-size: 14px;
+		line-height: 22px;
+	}
+
+	.download-options {
+		display: grid;
+		gap: 12px;
+	}
+
+	.option-row label {
+		display: block;
+		margin-bottom: 6px;
+		color: var(--muted);
+		font-size: 12px;
+		font-weight: 600;
+		text-transform: uppercase;
+	}
+
+	.option-row div {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 8px;
+	}
+
+	.option-row input {
+		min-width: 0;
+		height: 40px;
+		border: 1px solid #d4d4d4;
+		border-radius: 6px;
+		background: #fafafa;
+		padding: 0 12px;
+		color: var(--ink);
+		font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+		font-size: 13px;
+	}
+
+	.option-row button,
+	.qr-section a {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 40px;
+		border: 1px solid #171717;
+		border-radius: 6px;
+		background: #171717;
+		color: #ffffff;
+		padding: 0 12px;
+		text-decoration: none;
+		font-size: 13px;
+		font-weight: 500;
+		white-space: nowrap;
+	}
+
+	.qr-section {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		gap: 16px;
+		align-items: center;
+		margin-top: 18px;
+		border: 1px solid var(--line);
+		border-radius: 8px;
+		background: #fafafa;
+		padding: 14px;
+	}
+
+	.qr-section img {
+		width: 132px;
+		height: 132px;
+		border: 1px solid var(--line);
+		border-radius: 8px;
+		background: #ffffff;
+		padding: 8px;
+	}
+
+	.qr-section strong,
+	.qr-section span {
+		display: block;
+	}
+
+	.qr-section span {
+		margin: 6px 0 12px;
+		color: var(--muted);
+		font-size: 14px;
+		line-height: 21px;
+	}
+
+	@keyframes dialogIn {
+		from {
+			opacity: 0;
+			transform: translateY(12px) scale(0.98);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0) scale(1);
+		}
+	}
+
+	@keyframes successPop {
+		0% {
+			transform: scale(0.72);
+		}
+		70% {
+			transform: scale(1.08);
+		}
+		100% {
+			transform: scale(1);
+		}
+	}
+
+	.benefit-grid {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		box-shadow: none;
+	}
+
+	.benefit-grid article {
+		min-height: 164px;
+		padding: 20px;
+		border-right: 1px solid var(--line);
+	}
+
+	.benefit-grid article:last-child {
+		border-right: 0;
+	}
+
+	.benefit-grid h3 {
+		margin: 42px 0 10px;
+		font-size: 20px;
+	}
+
+	.benefit-grid p {
+		margin: 0;
+		color: var(--muted);
+		font-size: 14px;
+		line-height: 22px;
+	}
+
+	.seo-content {
+		position: relative;
+		z-index: 1;
+		width: min(1080px, calc(100% - 64px));
+		margin: 0 auto 48px;
+		border: 1px solid var(--line);
+		border-radius: 8px;
+		background: rgba(255, 255, 255, 0.94);
+		box-shadow: 0 24px 80px rgba(0, 0, 0, 0.08);
+		padding: 28px;
+	}
+
+	.seo-content h2 {
+		max-width: 760px;
+		margin: 0 0 20px;
+		font-size: clamp(30px, 4vw, 48px);
+		line-height: 1.08;
+		letter-spacing: 0;
+	}
+
+	.seo-columns {
+		columns: 2 320px;
+		column-gap: 36px;
+	}
+
+	.seo-columns p {
+		break-inside: avoid;
+		margin: 0 0 16px;
+		color: var(--body);
+		font-size: 16px;
+		line-height: 27px;
+	}
+
+	.faq-section {
+		position: relative;
+		z-index: 1;
+		width: min(1080px, calc(100% - 64px));
+		margin: 0 auto 56px;
+		border: 1px solid var(--line);
+		border-radius: 8px;
+		background: rgba(255, 255, 255, 0.94);
+		box-shadow: 0 24px 80px rgba(0, 0, 0, 0.08);
+		padding: 28px;
+	}
+
+	.faq-section h2 {
+		max-width: 760px;
+		margin: 0 0 22px;
+		font-size: clamp(30px, 4vw, 48px);
+		line-height: 1.08;
+		letter-spacing: 0;
+	}
+
+	.faq-list {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		border: 1px solid var(--line);
+		border-radius: 8px;
+		overflow: hidden;
+		background: #ffffff;
+	}
+
+	.faq-list article {
+		min-height: 210px;
+		padding: 20px;
+		border-right: 1px solid var(--line);
+		border-bottom: 1px solid var(--line);
+	}
+
+	.faq-list article:nth-child(2n) {
+		border-right: 0;
+	}
+
+	.faq-list article:nth-last-child(-n + 2) {
+		border-bottom: 0;
+	}
+
+	.faq-list h3 {
+		margin: 0 0 10px;
+		font-size: 19px;
+		line-height: 25px;
+		letter-spacing: 0;
+	}
+
+	.faq-list p {
+		margin: 0;
+		color: var(--body);
+		font-size: 15px;
+		line-height: 24px;
+	}
+
+	.related-searches {
+		position: relative;
+		z-index: 1;
+		width: min(1080px, calc(100% - 64px));
+		margin: 0 auto 56px;
+		border: 1px solid var(--line);
+		border-radius: 8px;
+		background: rgba(255, 255, 255, 0.94);
+		box-shadow: 0 24px 80px rgba(0, 0, 0, 0.08);
+		padding: 28px;
+	}
+
+	.related-searches h2 {
+		max-width: 760px;
+		margin: 0 0 22px;
+		font-size: clamp(30px, 4vw, 48px);
+		line-height: 1.08;
+		letter-spacing: 0;
+	}
+
+	.related-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		border: 1px solid var(--line);
+		border-radius: 8px;
+		overflow: hidden;
+		background: #ffffff;
+	}
+
+	.related-grid article {
+		min-height: 190px;
+		padding: 20px;
+		border-right: 1px solid var(--line);
+		border-bottom: 1px solid var(--line);
+	}
+
+	.related-grid article:nth-child(3n) {
+		border-right: 0;
+	}
+
+	.related-grid article:nth-last-child(-n + 3) {
+		border-bottom: 0;
+	}
+
+	.related-grid h3 {
+		margin: 0 0 10px;
+		font-size: 19px;
+		line-height: 25px;
+		letter-spacing: 0;
+	}
+
+	.related-grid p {
+		margin: 0;
+		color: var(--body);
+		font-size: 15px;
+		line-height: 24px;
+	}
+
+	.site-footer {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 10px;
+		width: min(1080px, calc(100% - 64px));
+		margin: 0 auto 40px;
+		border: 1px solid var(--line);
+		border-radius: 8px;
+		background: rgba(255, 255, 255, 0.84);
+		padding: 14px;
+	}
+
+	.site-footer a {
+		border-radius: 999px;
+		padding: 8px 12px;
+		color: var(--body);
+		text-decoration: none;
+		font-size: 14px;
+	}
+
+	.site-footer a:hover {
+		background: #171717;
+		color: #ffffff;
+	}
+
+	@media (max-width: 900px) {
+		.hero {
+			grid-template-columns: 1fr;
+			width: min(720px, calc(100% - 40px));
+			padding-top: 40px;
+		}
+
+		.hero-copy,
+		.upload-card {
+			min-height: auto;
+		}
+
+		.lookup-card {
+			max-width: none;
+		}
+
+		.benefit-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.benefit-grid article:nth-child(2n) {
+			border-right: 0;
+		}
+
+		.benefit-grid article:nth-child(-n + 2) {
+			border-bottom: 1px solid var(--line);
+		}
+	}
+
+	@media (max-width: 640px) {
+		.topbar {
+			padding: 0 16px;
+		}
+
+		.top-actions a:not(:first-child) {
+			display: none;
+		}
+
+		.hero,
+		.benefit-grid,
+		.seo-content,
+		.faq-section,
+		.related-searches,
+		.site-footer {
+			width: calc(100% - 32px);
+		}
+
+		.hero {
+			padding-top: 46px;
+		}
+
+		h1 {
+			font-size: 42px;
+		}
+
+		.dropzone {
+			min-height: 270px;
+		}
+
+		.result-box,
+		.lookup-form {
+			align-items: stretch;
+			flex-direction: column;
+		}
+
+		.option-row div,
+		.qr-section {
+			grid-template-columns: 1fr;
+		}
+
+		.qr-section img {
+			width: 150px;
+			height: 150px;
+		}
+
+		.benefit-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.faq-list {
+			grid-template-columns: 1fr;
+		}
+
+		.related-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.faq-list article,
+		.faq-list article:nth-child(2n),
+		.related-grid article,
+		.related-grid article:nth-child(3n) {
+			border-right: 0;
+			border-bottom: 1px solid var(--line);
+		}
+
+		.faq-list article:last-child,
+		.related-grid article:last-child {
+			border-bottom: 0;
+		}
+
+		.benefit-grid article,
+		.benefit-grid article:nth-child(2n) {
+			border-right: 0;
+			border-bottom: 1px solid var(--line);
+		}
+
+		.benefit-grid article:last-child {
+			border-bottom: 0;
+		}
+	}
+</style>
