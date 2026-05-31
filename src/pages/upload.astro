@@ -93,28 +93,7 @@ import Layout from '../layouts/Layout.astro';
 			</section>
 		</div>
 
-		<script lang="ts">
-			interface UploadPart {
-				part_number: number;
-				etag: string;
-			}
-
-			interface InitiatedUpload {
-				upload_id: string;
-				r2_key: string;
-				chunk_size: number;
-				num_parts: number;
-				part_urls: string[];
-			}
-
-			interface UploadedFile {
-				access_key: string;
-				download_url: string;
-				expires_at: string;
-				name: string;
-				size: number;
-			}
-
+		<script>
 			const API_BASE = 'https://filedrop-nine.vercel.app';
 			const DIRECT_LIMIT = 5 * 1024 * 1024;
 			const fileInput = document.querySelector<HTMLInputElement>('#fileInput');
@@ -123,10 +102,10 @@ import Layout from '../layouts/Layout.astro';
 			const modePill = document.querySelector<HTMLElement>('#modePill');
 			const progressBar = document.querySelector<HTMLElement>('#progressBar');
 			const statusText = document.querySelector<HTMLElement>('#statusText');
-			const resultBox = document.querySelector<HTMLElement>('#resultBox');
+			const resultBox = document.querySelector<HTMLDivElement>('#resultBox');
 			const accessKey = document.querySelector<HTMLElement>('#accessKey');
 			const downloadLink = document.querySelector<HTMLAnchorElement>('#downloadLink');
-			const successDialog = document.querySelector<HTMLElement>('#successDialog');
+			const successDialog = document.querySelector<HTMLDivElement>('#successDialog');
 			const dialogAccessKey = document.querySelector<HTMLInputElement>('#dialogAccessKey');
 			const dialogDownloadUrl = document.querySelector<HTMLInputElement>('#dialogDownloadUrl');
 			const dialogQr = document.querySelector<HTMLImageElement>('#dialogQr');
@@ -157,8 +136,8 @@ import Layout from '../layouts/Layout.astro';
 				}
 			};
 
-			const bindDownloadLink = (link: HTMLAnchorElement | null, filename?: string) => {
-				if (!link) return;
+			const bindDownloadLink = (link: HTMLAnchorElement, filename: string) => {
+				if (!(link instanceof HTMLAnchorElement)) return;
 				link.download = filename || 'download';
 				link.dataset.filename = filename || 'download';
 			};
@@ -166,7 +145,7 @@ import Layout from '../layouts/Layout.astro';
 			const readError = async (response: Response) => {
 				try {
 					const data = await response.json();
-					return typeof data.detail === 'string' ? data.detail : `Request failed with ${response.status}`;
+					return data.detail || `Request failed with ${response.status}`;
 				} catch {
 					return `Request failed with ${response.status}`;
 				}
@@ -181,7 +160,7 @@ import Layout from '../layouts/Layout.astro';
 				if (modePill) modePill.textContent = mode;
 			};
 
-			const openSuccessDialog = (data: UploadedFile) => {
+			const openSuccessDialog = (data: any) => {
 				if (!successDialog) return;
 				if (dialogAccessKey) dialogAccessKey.value = data.access_key;
 				if (dialogDownloadUrl) dialogDownloadUrl.value = data.download_url;
@@ -205,12 +184,12 @@ import Layout from '../layouts/Layout.astro';
 				document.body.style.overflow = '';
 			};
 
-			document.querySelectorAll<HTMLElement>('[data-close-dialog]').forEach((control) => {
+			document.querySelectorAll('[data-close-dialog]').forEach((control) => {
 				control.addEventListener('click', closeSuccessDialog);
 			});
 
-			document.querySelectorAll<HTMLButtonElement>('[data-copy-target]').forEach((button) => {
-				button.addEventListener('click', async () => {
+			document.querySelectorAll('[data-copy-target]').forEach(async (button) => {
+					if (!(button instanceof HTMLElement)) return;
 					const target = document.querySelector(`#${button.dataset.copyTarget}`);
 					if (!(target instanceof HTMLInputElement)) return;
 					await navigator.clipboard.writeText(target.value);
@@ -219,21 +198,19 @@ import Layout from '../layouts/Layout.astro';
 						button.textContent = button.dataset.copyTarget === 'dialogAccessKey' ? 'Copy key' : 'Copy link';
 					}, 1200);
 				});
-			});
 
-			document.addEventListener('keydown', (event: KeyboardEvent) => {
+			document.addEventListener('keydown', (event) => {
 				if (event.key === 'Escape') closeSuccessDialog();
 			});
 
-			document.addEventListener('click', (event: MouseEvent) => {
-				if (!(event.target instanceof Element)) return;
-				const link = event.target.closest('[data-download-link]');
-				if (!(link instanceof HTMLAnchorElement) || !link.href || link.href.endsWith('#')) return;
+			document.addEventListener('click', (event) => {
+				const target = event.target instanceof Element ? event.target.closest('[data-download-link]') : null;
+				if (!(target instanceof HTMLAnchorElement) || !target.href || target.href.endsWith('#')) return;
 				event.preventDefault();
-				startDownload(link.href, link.dataset.filename || link.download || 'download');
+				startDownload(target.href, target.dataset.filename || target.download || 'download');
 			});
 
-			const uploadSmallFile = async (file: File): Promise<UploadedFile> => {
+			const uploadSmallFile = async (file: File) => {
 				const form = new FormData();
 				form.append('file', file);
 				setProgress(18);
@@ -243,7 +220,7 @@ import Layout from '../layouts/Layout.astro';
 				return response.json();
 			};
 
-			const uploadLargeFile = async (file: File): Promise<UploadedFile> => {
+			const uploadLargeFile = async (file: File) => {
 				setStatus('Preparing secure upload...', 'Uploading');
 				const initiateResponse = await fetch(`${API_BASE}/api/files/upload/initiate`, {
 					method: 'POST',
@@ -255,8 +232,8 @@ import Layout from '../layouts/Layout.astro';
 					}),
 				});
 				if (!initiateResponse.ok) throw new Error(await readError(initiateResponse));
-				const upload = (await initiateResponse.json()) as InitiatedUpload;
-				const parts: UploadPart[] = [];
+				const upload = await initiateResponse.json();
+				const parts = [];
 
 				for (let index = 0; index < upload.part_urls.length; index += 1) {
 					const start = index * upload.chunk_size;
@@ -289,8 +266,9 @@ import Layout from '../layouts/Layout.astro';
 				return completeResponse.json();
 			};
 
-			fileInput?.addEventListener('change', async () => {
-				const [file] = Array.from(fileInput.files || []);
+			fileInput?.addEventListener('change', async (event) => {
+				const input = event.currentTarget as HTMLInputElement;
+				const [file] = Array.from(input.files || []);
 				if (!file) return;
 
 				if (fileTitle) fileTitle.textContent = file.name;
