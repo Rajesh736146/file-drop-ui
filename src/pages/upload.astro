@@ -93,32 +93,53 @@ import Layout from '../layouts/Layout.astro';
 			</section>
 		</div>
 
-		<script>
+		<script lang="ts">
+			interface UploadPart {
+				part_number: number;
+				etag: string;
+			}
+
+			interface InitiatedUpload {
+				upload_id: string;
+				r2_key: string;
+				chunk_size: number;
+				num_parts: number;
+				part_urls: string[];
+			}
+
+			interface UploadedFile {
+				access_key: string;
+				download_url: string;
+				expires_at: string;
+				name: string;
+				size: number;
+			}
+
 			const API_BASE = 'https://filedrop-nine.vercel.app';
 			const DIRECT_LIMIT = 5 * 1024 * 1024;
-			const fileInput = document.querySelector('#fileInput');
-			const fileTitle = document.querySelector('#fileTitle');
-			const fileMeta = document.querySelector('#fileMeta');
-			const modePill = document.querySelector('#modePill');
-			const progressBar = document.querySelector('#progressBar');
-			const statusText = document.querySelector('#statusText');
-			const resultBox = document.querySelector('#resultBox');
-			const accessKey = document.querySelector('#accessKey');
-			const downloadLink = document.querySelector('#downloadLink');
-			const successDialog = document.querySelector('#successDialog');
-			const dialogAccessKey = document.querySelector('#dialogAccessKey');
-			const dialogDownloadUrl = document.querySelector('#dialogDownloadUrl');
-			const dialogQr = document.querySelector('#dialogQr');
-			const dialogOpenLink = document.querySelector('#dialogOpenLink');
-			const dialogFileMeta = document.querySelector('#dialogFileMeta');
+			const fileInput = document.querySelector<HTMLInputElement>('#fileInput');
+			const fileTitle = document.querySelector<HTMLElement>('#fileTitle');
+			const fileMeta = document.querySelector<HTMLElement>('#fileMeta');
+			const modePill = document.querySelector<HTMLElement>('#modePill');
+			const progressBar = document.querySelector<HTMLElement>('#progressBar');
+			const statusText = document.querySelector<HTMLElement>('#statusText');
+			const resultBox = document.querySelector<HTMLElement>('#resultBox');
+			const accessKey = document.querySelector<HTMLElement>('#accessKey');
+			const downloadLink = document.querySelector<HTMLAnchorElement>('#downloadLink');
+			const successDialog = document.querySelector<HTMLElement>('#successDialog');
+			const dialogAccessKey = document.querySelector<HTMLInputElement>('#dialogAccessKey');
+			const dialogDownloadUrl = document.querySelector<HTMLInputElement>('#dialogDownloadUrl');
+			const dialogQr = document.querySelector<HTMLImageElement>('#dialogQr');
+			const dialogOpenLink = document.querySelector<HTMLAnchorElement>('#dialogOpenLink');
+			const dialogFileMeta = document.querySelector<HTMLElement>('#dialogFileMeta');
 
-			const formatBytes = (bytes) => {
+			const formatBytes = (bytes: number) => {
 				if (bytes >= 1024 * 1024 * 1024) return `${(bytes / 1024 / 1024 / 1024).toFixed(2)} GB`;
 				if (bytes >= 1024 * 1024) return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
 				return `${Math.max(1, Math.round(bytes / 1024))} KB`;
 			};
 
-			const startDownload = async (url, filename = 'download') => {
+			const startDownload = async (url: string, filename = 'download') => {
 				try {
 					const response = await fetch(url);
 					if (!response.ok) throw new Error('Download request failed.');
@@ -136,31 +157,31 @@ import Layout from '../layouts/Layout.astro';
 				}
 			};
 
-			const bindDownloadLink = (link, filename) => {
-				if (!(link instanceof HTMLAnchorElement)) return;
+			const bindDownloadLink = (link: HTMLAnchorElement | null, filename?: string) => {
+				if (!link) return;
 				link.download = filename || 'download';
 				link.dataset.filename = filename || 'download';
 			};
 
-			const readError = async (response) => {
+			const readError = async (response: Response) => {
 				try {
 					const data = await response.json();
-					return data.detail || `Request failed with ${response.status}`;
+					return typeof data.detail === 'string' ? data.detail : `Request failed with ${response.status}`;
 				} catch {
 					return `Request failed with ${response.status}`;
 				}
 			};
 
-			const setProgress = (value) => {
+			const setProgress = (value: number) => {
 				if (progressBar) progressBar.style.inlineSize = `${Math.max(0, Math.min(100, value))}%`;
 			};
 
-			const setStatus = (message, mode = 'Ready') => {
+			const setStatus = (message: string, mode = 'Ready') => {
 				if (statusText) statusText.textContent = message;
 				if (modePill) modePill.textContent = mode;
 			};
 
-			const openSuccessDialog = (data) => {
+			const openSuccessDialog = (data: UploadedFile) => {
 				if (!successDialog) return;
 				if (dialogAccessKey) dialogAccessKey.value = data.access_key;
 				if (dialogDownloadUrl) dialogDownloadUrl.value = data.download_url;
@@ -184,11 +205,11 @@ import Layout from '../layouts/Layout.astro';
 				document.body.style.overflow = '';
 			};
 
-			document.querySelectorAll('[data-close-dialog]').forEach((control) => {
+			document.querySelectorAll<HTMLElement>('[data-close-dialog]').forEach((control) => {
 				control.addEventListener('click', closeSuccessDialog);
 			});
 
-			document.querySelectorAll('[data-copy-target]').forEach((button) => {
+			document.querySelectorAll<HTMLButtonElement>('[data-copy-target]').forEach((button) => {
 				button.addEventListener('click', async () => {
 					const target = document.querySelector(`#${button.dataset.copyTarget}`);
 					if (!(target instanceof HTMLInputElement)) return;
@@ -200,18 +221,19 @@ import Layout from '../layouts/Layout.astro';
 				});
 			});
 
-			document.addEventListener('keydown', (event) => {
+			document.addEventListener('keydown', (event: KeyboardEvent) => {
 				if (event.key === 'Escape') closeSuccessDialog();
 			});
 
-			document.addEventListener('click', (event) => {
+			document.addEventListener('click', (event: MouseEvent) => {
+				if (!(event.target instanceof Element)) return;
 				const link = event.target.closest('[data-download-link]');
 				if (!(link instanceof HTMLAnchorElement) || !link.href || link.href.endsWith('#')) return;
 				event.preventDefault();
 				startDownload(link.href, link.dataset.filename || link.download || 'download');
 			});
 
-			const uploadSmallFile = async (file) => {
+			const uploadSmallFile = async (file: File): Promise<UploadedFile> => {
 				const form = new FormData();
 				form.append('file', file);
 				setProgress(18);
@@ -221,7 +243,7 @@ import Layout from '../layouts/Layout.astro';
 				return response.json();
 			};
 
-			const uploadLargeFile = async (file) => {
+			const uploadLargeFile = async (file: File): Promise<UploadedFile> => {
 				setStatus('Preparing secure upload...', 'Uploading');
 				const initiateResponse = await fetch(`${API_BASE}/api/files/upload/initiate`, {
 					method: 'POST',
@@ -233,8 +255,8 @@ import Layout from '../layouts/Layout.astro';
 					}),
 				});
 				if (!initiateResponse.ok) throw new Error(await readError(initiateResponse));
-				const upload = await initiateResponse.json();
-				const parts = [];
+				const upload = (await initiateResponse.json()) as InitiatedUpload;
+				const parts: UploadPart[] = [];
 
 				for (let index = 0; index < upload.part_urls.length; index += 1) {
 					const start = index * upload.chunk_size;
@@ -267,8 +289,8 @@ import Layout from '../layouts/Layout.astro';
 				return completeResponse.json();
 			};
 
-			fileInput?.addEventListener('change', async (event) => {
-				const [file] = Array.from(event.target.files || []);
+			fileInput?.addEventListener('change', async () => {
+				const [file] = Array.from(fileInput.files || []);
 				if (!file) return;
 
 				if (fileTitle) fileTitle.textContent = file.name;
