@@ -577,8 +577,37 @@
 
 @media (max-width: 640px) {
   .hero, .benefit-grid, .seo-content, .faq-section, .related-searches, .site-footer { width: calc(100% - 32px); }
-  .app-shell h1 { font-size: 42px; }
-  .dropzone { min-height: 270px; }
+  .hero { gap: 10px; padding: 10px 0 18px; }
+  .hero-copy { padding: 12px; }
+  .live-status { margin-bottom: 8px; padding: 4px 8px; font-size: 10px; }
+  .app-shell h1 { margin-bottom: 6px; font-size: 25px; line-height: 1.03; }
+  .hero-subtitle { margin-bottom: 0; font-size: 13px; line-height: 18px; }
+  .upload-card { padding: 10px; }
+  .transfer-card { gap: 10px; }
+  .card-head { gap: 10px; margin-bottom: 8px; }
+  .card-head strong { margin-top: 2px; font-size: 16px; }
+  .app-shell .card-head p, .app-shell .card-head span { font-size: 10px; }
+  .card-head span { padding: 5px 8px; }
+  .transfer-card .dropzone, .dropzone { min-height: 132px; padding: 14px; }
+  .dropzone::before { inset: 10px; }
+  .upload-icon { width: 46px; height: 46px; margin-bottom: 8px; border-radius: 14px; }
+  .upload-icon span { border-radius: 11px; }
+  .upload-icon::after { width: 22px; height: 3px; }
+  .upload-icon span::after { width: 3px; height: 22px; }
+  .dropzone strong { font-size: 19px; }
+  .dropzone small { max-width: 260px; margin-top: 4px; font-size: 12px; line-height: 16px; }
+  .progress-wrap { margin-top: 8px; }
+  .progress-wrap p, .lookup-status { margin-top: 6px; font-size: 12px; line-height: 16px; }
+  .transfer-lookup { padding-top: 10px; }
+  .lookup-head { gap: 8px; margin-bottom: 8px; }
+  .lookup-icon { width: 32px; height: 32px; }
+  .lookup-icon::before { width: 11px; height: 11px; border-width: 2px; }
+  .lookup-head .eyebrow { margin-bottom: 2px; }
+  .lookup-head h2 { font-size: 18px; }
+  .lookup-badge { padding: 4px 7px; font-size: 9px; }
+  .lookup-form { gap: 6px; }
+  .lookup-form input { height: 38px; font-size: 13px; }
+  .lookup-form button { min-height: 38px; }
   .success-dialog { place-items: start center; padding: 12px; }
   .dialog-panel { max-height: calc(100dvh - 24px); padding: 18px; }
   .dialog-panel h2 { margin-right: 28px; font-size: 28px; }

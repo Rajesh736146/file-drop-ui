@@ -4,7 +4,6 @@ const { active = '' } = Astro.props;
 <header class="topbar">
   <a class="brand" href="/" aria-label="Online File Share home">
     <img class="brand-mark" src="/favicon.svg" alt="" width="24" height="24" />
-    <span>Online File Share</span>
   </a>
   <div class="topbar-right">
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">
@@ -56,22 +55,23 @@ const { active = '' } = Astro.props;
 
   @media (max-width: 640px) {
     .topbar-right {
-      display: contents;
+      flex: 1 1 auto;
+      min-width: 0;
+      gap: 6px;
     }
 
     .theme-toggle {
-      grid-column: 2;
-      grid-row: 1;
-      justify-self: end;
+      order: 2;
+      flex: 0 0 auto;
+      width: 32px;
+      height: 32px;
     }
 
     .top-actions {
-      grid-column: 1 / -1;
-      grid-row: 2;
-      width: 100%;
+      order: 1;
       min-width: 0;
+      width: auto;
       overflow-x: auto;
-      padding-bottom: 2px;
       scrollbar-width: none;
     }
 

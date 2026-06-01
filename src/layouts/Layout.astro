@@ -22,7 +22,7 @@ const imageUrl = new URL(image, Astro.site ?? Astro.url).toString();
 			(function() {
 				var saved = localStorage.getItem('theme');
 				var hour = new Date().getHours();
-				var isNight = hour >= 19 || hour < 6;
+				var isNight = hour >= 18 || hour < 6;
 				if (!isNight) {
 					localStorage.removeItem('theme');
 					document.documentElement.setAttribute('data-theme', 'light');
