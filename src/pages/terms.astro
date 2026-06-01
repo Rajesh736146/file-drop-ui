@@ -1,9 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Topbar from '../components/Topbar.astro';
+import FileTransferArticles from '../components/FileTransferArticles.astro';
+
+const pageDescription =
+	'Terms for using Onlne File Share for temporary browser-based file transfer, upload links, QR codes, and access keys.';
 ---
 
-<Layout title="Terms and Conditions - Onlne File Share">
+<Layout
+	title="Terms and Conditions - Onlne File Share"
+	description={pageDescription}
+	keywords="file sharing terms, file transfer terms, access key sharing, temporary file upload"
+>
 	<main class="page-shell">
 		<Topbar />
 
@@ -19,8 +27,14 @@ import Topbar from '../components/Topbar.astro';
 				<p>Treat access keys like passwords. Do not post private keys publicly or share sensitive documents unless you understand the risks.</p>
 				<h2>Service availability</h2>
 				<p>The service is provided as a lightweight file sharing tool. Availability, upload behavior, and download access may depend on browser, network, storage, and API conditions.</p>
+				<h2>Online file transfer expectations</h2>
+				<p>Onlne File Share is for temporary browser-based transfer, not long-term storage. Keep your own copy of important files.</p>
+				<h2>Sharing keys and links</h2>
+				<p>Send file links, QR codes, and access keys through channels you trust. Do not publish them on public pages, comments, forums, or social profiles.</p>
 			</div>
 		</section>
+
+		<FileTransferArticles />
 	</main>
 </Layout>
 

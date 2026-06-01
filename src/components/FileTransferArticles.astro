@@ -1,0 +1,167 @@
+---
+const articles = [
+	{
+		title: 'How to share files online free',
+		body: [
+			'Choose the file, wait for the upload, then copy the access key or download link. Send it through email, chat, or another private channel. The other person does not need a folder invite or a new app just to open the file.',
+			'If you have several files, put them into one ZIP first. That gives the recipient one download instead of several separate keys.',
+		],
+	},
+	{
+		title: 'How to transfer files between devices',
+		body: [
+			'Upload the file from the device where it already exists. After the upload, open the link on the other device or enter the access key on the retrieve page.',
+			'This is useful when you need to move a video from phone to PC, send a PDF to a tablet, or grab a ZIP file on another laptop.',
+		],
+	},
+	{
+		title: 'How to share files by QR code',
+		body: [
+			'After a successful upload, the dialog shows a QR code for the download link. Scan it with another device instead of typing a long URL.',
+			'Only show the QR code to people who should have the file. Anyone who scans it may be able to open the download while the link is valid.',
+		],
+	},
+	{
+		title: 'Online file transfer to mobile free',
+		body: [
+			'Upload the file, then open the generated link or QR code on the mobile device. This works well for PDFs, photos, ZIP files, and short videos.',
+			'For your own phone, scanning the QR code is usually fastest. For someone else, send the access key or link in a private message.',
+		],
+	},
+	{
+		title: 'Send Anywhere',
+		body: [
+			'People searching for Send Anywhere usually want a quick way to move a file from one device to another. This site keeps that idea simple in the browser: upload a file, copy the key or link, and let the other person retrieve it.',
+			'This is not the same product as Send Anywhere. It is another option when you want a browser-based file drop with an access key and QR code.',
+		],
+	},
+	{
+		title: 'Online file transfer to mobile app',
+		body: [
+			'You do not always need a dedicated mobile app to transfer a file. A browser link can be enough. Upload the file here, then open the link on your phone or paste the key on the retrieve page.',
+			'If your phone asks for permission to download or open the file, follow the normal browser prompt.',
+		],
+	},
+	{
+		title: 'ShareDrop',
+		body: [
+			'ShareDrop is another name people search when they want simple file sharing. If you are comparing options, think about what you need: same-network sharing, direct device handoff, or a link that someone can open later.',
+			'Onlne File Share focuses on the link-and-key style. Upload once, send the key, and the recipient can retrieve the file from their browser.',
+		],
+	},
+	{
+		title: 'File transfer online free',
+		body: [
+			'For a free online file transfer, choose the file, wait for the upload to complete, and copy the download link. This avoids the usual problem where email refuses large attachments.',
+			'If you are sending several files, make a ZIP first. It keeps the transfer cleaner for the person downloading it.',
+		],
+	},
+	{
+		title: 'Online file transfer to mobile Android',
+		body: [
+			'To transfer a file to an Android phone, upload the file and open the link in Chrome or another Android browser. You can also scan the QR code from the upload dialog if the file was uploaded from a computer.',
+			'Android may place the file in Downloads or ask which app should open it. That part depends on the file type and the apps installed on the phone.',
+		],
+	},
+	{
+		title: 'How to transfer files from PC to mobile wirelessly',
+		body: [
+			'On your PC, upload the file from this site. When the upload finishes, scan the QR code with your phone or send the download link to yourself.',
+			'This is helpful when a USB cable is not nearby, Bluetooth is slow, or you just need a one-time transfer from desktop to mobile.',
+		],
+	},
+	{
+		title: 'Send Anywhere file transfer',
+		body: [
+			'If you searched for Send Anywhere file transfer, you are probably looking for a quick device-to-device handoff. Here, the handoff is done with a browser upload, an access key, and a download link.',
+			'Use it when you want a simple web option. Check the file name and size before you share the key, especially for work files or personal files.',
+		],
+	},
+];
+---
+
+<section class="article-section" aria-labelledby="file-transfer-guides-title">
+	<p class="eyebrow">File sharing guides</p>
+	<h2 id="file-transfer-guides-title">Simple ways to send files from your browser</h2>
+	<div class="article-grid">
+		{
+			articles.map((article) => (
+				<article>
+					<h3>{article.title}</h3>
+					{article.body.map((paragraph) => <p>{paragraph}</p>)}
+					<a href="/">Use this file drop</a>
+				</article>
+			))
+		}
+	</div>
+</section>
+
+<style>
+	.article-section {
+		position: relative;
+		z-index: 1;
+		width: min(1080px, calc(100% - 64px));
+		margin: 0 auto 48px;
+		border: 1px solid var(--line);
+		border-radius: 8px;
+		background: var(--card-bg);
+		box-shadow: var(--shadow);
+		padding: 28px;
+	}
+
+	.article-section h2 {
+		margin: 0 0 14px;
+		font-size: clamp(28px, 4vw, 42px);
+		line-height: 1.1;
+		color: var(--ink);
+	}
+
+	.article-grid {
+		display: grid;
+		gap: 14px;
+		margin-top: 20px;
+	}
+
+	.article-grid article {
+		border: 1px solid var(--line);
+		border-radius: 8px;
+		background: var(--card-inner);
+		padding: 20px;
+	}
+
+	.article-grid h3 {
+		margin: 0 0 10px;
+		font-size: 22px;
+		line-height: 1.2;
+		color: var(--ink);
+	}
+
+	.article-grid p {
+		margin: 0 0 12px;
+		color: var(--body);
+		font-size: 16px;
+		line-height: 27px;
+	}
+
+	.article-grid a {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 38px;
+		border: 1px solid var(--btn-bg);
+		border-radius: 6px;
+		background: var(--btn-bg);
+		color: var(--btn-color);
+		padding: 0 12px;
+		text-decoration: none;
+		font-size: 14px;
+		font-weight: 600;
+	}
+
+	@media (max-width: 640px) {
+		.article-section {
+			width: calc(100% - 32px);
+			padding: 20px;
+		}
+	}
+</style>

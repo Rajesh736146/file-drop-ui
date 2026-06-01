@@ -3,81 +3,81 @@ import Layout from '../layouts/Layout.astro';
 import Topbar from '../components/Topbar.astro';
 import '../styles/home.css';
 
-const homeTitle = 'Online Fileshare - Free Online File Sharing and Secure File Transfer';
+const homeTitle = 'Onlne File Share - Online File Sharing, File Transfer, and File Drop';
 const homeDescription =
-	'Use Onlne File Share as a free online fileshare tool for secure file transfer, cloud share links, sending large files, and anonymous filesharing with temporary download keys.';
+	'Use Onlne File Share to upload a file, get a short access key, and share a download link. A simple online file sharing and file transfer page for quick file drops.';
 const homeKeywords =
-	'Online Fileshare, free online fileshare, file sharing, fle transfer, file transfer, file transfer online free, file transfer link, online file share without login, file sharing app, Send Anywhere file transfer, File transfer io, file transfer mobile to PC, online file transfer Mobile to PC, cloud share, cloud storage, send large files, share files, secure file transfer, anonymous filesharing, p2p sharing, webtransfer free, dropbox alternative, send big files, link sharing app';
+	'online file sharing, online file transfer, online file drop, file drop, file sharing, file transfer, file transfer online free, file transfer link, online file share without login, file sharing app, send large files, share files, secure file transfer, file transfer mobile to PC, online fileshare, free online fileshare, onlne file sharing, online file shaing, online file frop';
 const faqItems = [
 	{
 		question: 'Why does my email say my file is too large to send, and how do I fix it?',
 		answer:
-			'Most email services limit attachments, so large videos, ZIP files, and folders can fail before they ever reach the recipient. With this online file share tool, you upload the file and send a download key or link instead of attaching the file directly to email.',
+			'Email services often block large attachments. Upload the file here, then send the key or download link instead of attaching the file.',
 	},
 	{
 		question: 'Can I use this online file share tool without creating an account?',
 		answer:
-			'Yes. Onlne File Share is designed as a free online fileshare workflow for quick transfers. You can upload a file, receive an access key, and share it without creating a traditional cloud storage account.',
+			'Yes. Upload the file, copy the access key, and share it. You do not need to create a storage workspace first.',
 	},
 	{
 		question: 'How long do generated file-sharing links remain active?',
 		answer:
-			'Each upload returns an expiry time with the download details. The app shows that expiry after upload, so you can see how long the temporary link is expected to remain available before sharing it.',
+			'The upload result shows an expiry time. Check that time before you send the link or key.',
 	},
 	{
 		question: 'How secure is my data when uploading files to an online transfer tool?',
 		answer:
-			'The app uses a secure file transfer flow with temporary access keys and download links. Treat every access key like a temporary password and share it only through trusted channels.',
+			'Treat the access key like a password. Only send it to people who should be able to download the file.',
 	},
 	{
 		question: 'Can I send an entire folder or multiple files at the same time?',
 		answer:
-			'The current upload flow is focused on reliable single-file transfer. If you need to share multiple files, compress them into a ZIP first or upload each file separately and share the generated keys.',
+			'For one link, put the folder or files into a ZIP and upload that ZIP. You can also upload files one by one.',
 	},
 	{
 		question: 'Is there a limit on the size of files I can upload?',
 		answer:
-			'The upload experience supports large files by handling bigger uploads in parts behind the scenes. If your file is too large for email, this file sharing workflow is built to help send big files through a browser.',
+			'Large files are handled in parts behind the scenes. If a file is too big for email, try sending it from the upload page.',
 	},
 	{
 		question: 'Can I send multiple files at once in a single link?',
 		answer:
-			'For one shareable link, place multiple items into one ZIP archive and upload that archive. This keeps the download simple for the recipient and works well for project folders, photos, and document bundles.',
+			'Yes, if you ZIP them first. One ZIP gives the recipient one download instead of several separate keys.',
 	},
 	{
 		question: 'How do I password protect a file link before sharing it?',
 		answer:
-			'Password protection is not shown as a current page control. For now, keep access keys private, share them only with intended recipients, and avoid posting download keys publicly.',
+			'There is no separate password field right now. Keep the access key private and do not post it publicly.',
 	},
 	{
 		question: 'Does this file transfer tool work on mobile devices and smartphones?',
 		answer:
-			'Yes. The website is built for modern browsers, so you can use it on desktop or mobile to upload files, retrieve a shared access key, and open a download link.',
+			'Yes. You can upload or retrieve files from a phone browser, tablet, or desktop browser.',
 	},
 	{
 		question: 'Can I track if my shared file has been downloaded?',
 		answer:
-			'Download tracking is not shown in the current interface. The tool focuses on fast upload, link sharing, QR code sharing, and retrieval through an access key.',
+			'No download tracking is shown in the current interface.',
 	},
 	{
 		question: 'Can I use this as a file transfer online free tool?',
 		answer:
-			'Yes. Onlne File Share works as a file transfer online free tool for browser-based uploads and downloads. Upload a file, copy the generated access key or file transfer link, and share it with the recipient.',
+			'Yes. Upload from the browser, copy the key or file transfer link, and send it to the recipient.',
 	},
 	{
 		question: 'How do I create a file transfer link?',
 		answer:
-			'Upload your file and wait for the success dialog. The app shows a downloadable link, an access key, and a QR code so you can share the file transfer link in email, chat, or another trusted channel.',
+			'Upload the file and wait for the success dialog. It shows the link, the key, and a QR code.',
 	},
 	{
 		question: 'Can I transfer files from mobile to PC online?',
 		answer:
-			'Yes. You can upload from a mobile browser and open the same file on a PC by using the access key, download link, or QR code. This makes the tool useful for online file transfer mobile to PC workflows.',
+			'Yes. Upload on your phone, then open the link, QR code, or key on your PC.',
 	},
 	{
 		question: 'Is this a Send Anywhere or File transfer io alternative?',
 		answer:
-			'Onlne File Share offers a simple alternative for users searching for Send Anywhere file transfer, File transfer io, or a lightweight file sharing app. It focuses on upload, access key sharing, QR code sharing, and quick retrieval.',
+			'It can work as a small alternative when you only need a quick upload, a key, and a download link.',
 	},
 ];
 const faqSchema = {
@@ -92,6 +92,22 @@ const faqSchema = {
 		},
 	})),
 };
+
+const appSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'WebApplication',
+	name: 'Onlne File Share',
+	url: 'https://onlnefileshare.com/',
+	applicationCategory: 'UtilitiesApplication',
+	operatingSystem: 'Any modern browser',
+	description:
+		'Upload files, create access keys, and share temporary download links from a browser.',
+	offers: {
+		'@type': 'Offer',
+		price: '0',
+		priceCurrency: 'USD',
+	},
+};
 ---
 
 <Layout title={homeTitle} description={homeDescription} keywords={homeKeywords}>
@@ -101,10 +117,10 @@ const faqSchema = {
 		<section class="hero">
 			<div class="hero-copy">
 				<p class="live-status"><span aria-hidden="true"></span>Ready For Upload</p>
-				<h1>Upload files. Share secure download keys.</h1>
+				<h1>Online file sharing without the extra setup.</h1>
 				<p class="hero-subtitle">
-					A clean file drop for quick sharing: choose a file, upload it securely, and share a
-					short access key when it is ready.
+					Choose a file, upload it, and share the access key or download link. Useful for quick
+					file drops, online file transfer, and moving files between devices.
 				</p>
 			</div>
 
@@ -159,28 +175,36 @@ const faqSchema = {
 			</section>
 		</section>
 
-		<section class="benefit-grid" id="privacy" aria-label="File sharing benefits">
-			<article>
-				<h3>Simple sharing</h3>
-				<p>Upload once and share a short access key with anyone who needs the file.</p>
-			</article>
-			<article>
-				<h3>Large-file ready</h3>
-				<p>Big uploads are split and sent safely so the experience stays stable.</p>
-			</article>
-			<article>
-				<h3>Fast downloads</h3>
-				<p>Files are stored on R2 and opened through temporary download links.</p>
-			</article>
-			<article>
-				<h3>Private by default</h3>
-				<p>Access keys expire, and the page only shows what people need to send or retrieve files.</p>
-			</article>
-		</section>
+		<details class="collapsible-section benefit-details" id="privacy">
+			<summary>
+				<span class="eyebrow">File sharing benefits</span>
+				<strong>Why use this file transfer tool?</strong>
+			</summary>
+			<section class="benefit-grid" aria-label="File sharing benefits">
+				<article>
+					<h3>Simple sharing</h3>
+					<p>Upload once and share a short access key with anyone who needs the file.</p>
+				</article>
+				<article>
+					<h3>Large-file ready</h3>
+					<p>Big uploads are split and sent safely so the experience stays stable.</p>
+				</article>
+				<article>
+					<h3>Fast downloads</h3>
+					<p>Files are stored on R2 and opened through temporary download links.</p>
+				</article>
+				<article>
+					<h3>Private by default</h3>
+					<p>Access keys expire, and the page only shows what people need to send or retrieve files.</p>
+				</article>
+			</section>
+		</details>
 
-		<section class="faq-section" aria-labelledby="faq-title">
-			<p class="eyebrow">File sharing FAQ</p>
-			<h2 id="faq-title">Questions about online file sharing</h2>
+		<details class="faq-section collapsible-section" aria-labelledby="faq-title">
+			<summary>
+				<span class="eyebrow">File sharing FAQ</span>
+				<h2 id="faq-title">Questions about online file sharing</h2>
+			</summary>
 			<div class="faq-list">
 				{
 					faqItems.map((item) => (
@@ -189,112 +213,99 @@ const faqSchema = {
 							<p>{item.answer}</p>
 						</article>
 					))
-				}
-			</div>
-		</section>
+					}
+				</div>
+		</details>
 
-		<section class="seo-content" aria-labelledby="seo-title">
-			<p class="eyebrow">Online Fileshare</p>
-			<h2 id="seo-title">A free online fileshare tool for fast, secure file sharing</h2>
+		<details class="seo-content collapsible-section" aria-labelledby="seo-title">
+			<summary>
+				<span class="eyebrow">Online file sharing</span>
+				<h2 id="seo-title">Send a file without making it complicated</h2>
+			</summary>
 			<div class="seo-columns">
 				<p>
-					Onlne File Share is built for anyone who needs a simple Online Fileshare experience
-					without the clutter of a traditional cloud storage dashboard. Instead of creating an
-					account, building folders, or inviting people into a workspace, you can upload a file,
-					receive a short access key, and share that key with the person who needs the download.
-					It is a free online fileshare workflow made for quick handoffs, temporary delivery,
-					and moments when you want a clean link sharing app that stays focused on one job:
-					move a file from you to someone else.
+					Onlne File Share is for the normal moments when you just need to send a file and move
+					on. No folder setup, no team workspace, no long sign-up flow. Upload the file, get an
+					access key, and send that key to the person who needs the download.
 				</p>
 				<p>
-					The tool works well for everyday file sharing, whether you need to send large files,
-					share files with a client, move a design export, deliver a video, or pass a document
-					to another device. Large uploads are handled in the background so the page can remain
-					responsive while the file is prepared. After upload, you get downloadable options,
-					a CDN download link, an access key, and a QR code that can be scanned from another
-					phone or computer. That makes Onlne File Share useful as a lightweight webtransfer
-					free option when email attachments are too small or when a chat app compresses media.
+					It is useful when email rejects an attachment, a chat app compresses a video, or you
+					want a quick online file transfer from your phone to your computer. After upload, the
+					page shows a download link, an access key, and a QR code.
 				</p>
 				<p>
-					Many people search for a Dropbox alternative when they do not need a complete drive,
-					sync client, or team storage suite. Onlne File Share is not trying to replace every
-					cloud storage feature. It is closer to a focused cloud share utility: upload, share,
-					retrieve, and move on. This approach is useful for one-time transfers, anonymous
-					filesharing, and temporary link delivery. The interface also includes a retrieval page,
-					so someone with an access key can quickly look up the file and start the download
-					without learning a complicated product.
+					This is not trying to be a full Dropbox replacement. It is closer to a small cloud share
+					tool for one-time transfers: upload, share, retrieve. Someone with the key can use the
+					retrieve page and download the file without learning a new app.
 				</p>
 				<p>
-					Security and clarity matter in any secure file transfer flow. Onlne File Share keeps
-					the visible experience straightforward by showing the access key, the generated
-					download link, the file details, and the expiry time after upload. Users should treat
-					access keys like temporary passwords and share them only through trusted channels.
-					Compared with p2p sharing tools, this cloud-backed flow is easier for recipients
-					who are not online at the same moment. Compared with full storage platforms, it is
-					faster for simple delivery. If you need to send big files, create a temporary cloud
-					share, or use a clean file transfer page from any browser, Onlne File Share gives you
-					the core workflow without extra friction.
+					People call this kind of page different things: online file sharing, online file
+					transfer, file drop, fileshare, or a quick send-large-file link. The job is the same:
+					put a file somewhere the other person can reach it.
 				</p>
 				<p>
-					The homepage, upload page, retrieval page, and privacy page are designed to make the
-					process understandable. Upload is for creating a shareable file. Retrieve is for people
-					who already have a key. Privacy explains what access keys mean and why you should keep
-					them private. Together, these pages make the website useful for both senders and
-					receivers. Whether you call it file sharing, file transfer, cloud share, anonymous
-					filesharing, or a webtransfer free alternative, the goal is the same: make sharing a
-					file feel fast, direct, and reliable.
+					Access keys should be treated like temporary passwords. Share them privately, especially
+					if the file is personal or work-related. The page shows the file name, size, link, and
+					expiry so you know what you are sending before you pass it along.
+				</p>
+				<p>
+					Use Upload when you are sending something. Use Retrieve when someone has already given
+					you a key. The rest of the site explains the basics: how the sharing works, what to keep
+					private, and where to ask for help.
 				</p>
 			</div>
-		</section>
+		</details>
 
-		<section class="related-searches" aria-labelledby="related-title">
-			<p class="eyebrow">People also search for</p>
-			<h2 id="related-title">Useful file transfer searches this tool supports</h2>
+		<details class="related-searches collapsible-section" aria-labelledby="related-title">
+			<summary>
+				<span class="eyebrow">People also search for</span>
+				<h2 id="related-title">Other ways people describe this</h2>
+			</summary>
 			<div class="related-grid">
 				<article>
 					<h3>File transfer online free</h3>
 					<p>
-						Use the browser upload flow when you need a file transfer online free option that
-						creates a shareable key and download link without a complex account setup.
+						Upload from the browser and get a key or link without setting up a heavy storage
+						account.
 					</p>
 				</article>
 				<article>
 					<h3>File transfer link</h3>
 					<p>
-						After upload, the success dialog shows a file transfer link, copy controls, and a QR
-						code so recipients can open the download from another device.
+						After upload, copy the file transfer link or use the QR code to open it on another
+						device.
 					</p>
 				</article>
 				<article>
 					<h3>Online file share without login</h3>
 					<p>
-						Onlne File Share is designed for quick online file share without login use cases:
-						upload the file, copy the key, and send it through a trusted channel.
+						For quick handoffs, upload the file, copy the key, and send it through a private
+						channel.
 					</p>
 				</article>
 				<article>
 					<h3>File sharing app</h3>
 					<p>
-						The website works like a lightweight file sharing app in the browser, with upload,
-						retrieve, privacy, QR sharing, and download actions.
+						The site keeps the basic file sharing actions in one place: upload, retrieve, copy,
+						and download.
 					</p>
 				</article>
 				<article>
 					<h3>File transfer mobile to PC</h3>
 					<p>
 						Upload from a phone, scan the QR code, or enter the access key on your computer for
-						online file transfer mobile to PC workflows.
+						a simple mobile to PC transfer.
 					</p>
 				</article>
 				<article>
 					<h3>Send Anywhere and File transfer io alternatives</h3>
 					<p>
-						If you are comparing Send Anywhere file transfer or File transfer io, this tool gives
-						you a focused web-based alternative for quick upload and retrieval.
+						If you only need a quick web upload and a download key, this is a small alternative
+						to bigger transfer tools.
 					</p>
 				</article>
 			</div>
-		</section>
+		</details>
 
 		<footer class="site-footer" aria-label="Footer navigation">
 			<a href="/about">About us</a>
@@ -303,6 +314,7 @@ const faqSchema = {
 			<a href="/contact">Contact us</a>
 		</footer>
 
+		<script type="application/ld+json" set:html={JSON.stringify(appSchema)} />
 		<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
 		<div class="success-dialog" id="successDialog" hidden>

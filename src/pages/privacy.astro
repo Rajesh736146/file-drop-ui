@@ -1,9 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Topbar from '../components/Topbar.astro';
+import FileTransferArticles from '../components/FileTransferArticles.astro';
+
+const pageDescription =
+	'Privacy notes for Onlne File Share: how access keys, temporary file links, uploads, and shared file metadata work.';
 ---
 
-<Layout>
+<Layout
+	title="Privacy Policy - Temporary File Sharing | Onlne File Share"
+	description={pageDescription}
+	keywords="file sharing privacy, secure file transfer, temporary access key, private file sharing"
+>
 	<main class="page-shell">
 		<Topbar active="privacy" />
 
@@ -21,12 +29,68 @@ import Topbar from '../components/Topbar.astro';
 			<article><span>05</span><h2>What to avoid</h2><p>Do not upload sensitive documents unless you are comfortable sharing the generated key privately.</p></article>
 			<article><span>06</span><h2>Your responsibility</h2><p>Only share keys through trusted channels, and avoid posting them in public places.</p></article>
 		</section>
+
+		<section class="privacy-copy" aria-labelledby="privacy-seo-title">
+			<p class="eyebrow">Sharing safely</p>
+			<h2 id="privacy-seo-title">A key is like a short-lived password</h2>
+			<p>
+				A generated key or link should be treated like a temporary password. If someone has it,
+				they may be able to open the file until it expires.
+			</p>
+			<p>
+				Share keys in private chats or email, not public comments or posts. For sensitive files,
+				pause first and decide whether a temporary browser upload is the right choice.
+			</p>
+			<p>
+				Privacy for online file sharing is mostly about who can reach the key. When you upload a
+				file, the page gives you a way to pass access to someone else. That key or link is useful
+				because it is simple, but it should not be treated like a public label. Send it only to the
+				person who should have the file, and avoid putting it in places where it can be copied by
+				people you do not know.
+			</p>
+			<p>
+				Onlne File Share is built for temporary handoffs, not permanent storage. Keep your own copy
+				of anything important. If you are sending a school project, a work document, a photo set, a
+				video, or a ZIP archive, make sure the recipient has what they need before you forget about
+				the upload. Temporary links are helpful, but they are not a replacement for backing up your
+				own files.
+			</p>
+			<p>
+				People may find this site while searching for secure file transfer, online file transfer,
+				online file sharing, online file drop, or even misspelled searches like onlne file shaing
+				and online file frop. No matter what phrase brought you here, the privacy habit is the
+				same: the file is only as private as the way you share the key. If the key is forwarded,
+				screenshot, pasted into a public group, or posted online, other people may be able to use
+				it too.
+			</p>
+			<p>
+				The page may show basic file details such as the file name, size, type, upload time, and
+				expiry time. These details help the sender and recipient confirm that they are handling the
+				right file. Before you download something, check the name and size. Before you share
+				something, check that you selected the correct file. Small checks like this prevent a lot
+				of mistakes.
+			</p>
+			<p>
+				Some files should not be shared casually. Legal documents, IDs, private financial records,
+				password lists, medical files, and confidential work material deserve extra care. If you
+				are unsure, use a more controlled method or talk to the recipient first. For everyday file
+				drops, quick transfers, and files that are safe to send through a temporary link, this site
+				keeps the process straightforward.
+			</p>
+			<p>
+				The simplest rule is this: upload only what you mean to share, check the result, and send
+				the access key through a channel you trust. That is the foundation of safer online file
+				sharing, whether you call it a fileshare, a file transfer link, or a browser file drop.
+			</p>
+		</section>
+
+		<FileTransferArticles />
 	</main>
 </Layout>
 
 <style>
-	.privacy-hero, .privacy-grid { position: relative; z-index: 1; }
-	.privacy-hero, .privacy-grid { width: min(1080px, calc(100% - 64px)); margin: 0 auto; }
+	.privacy-hero, .privacy-grid, .privacy-copy { position: relative; z-index: 1; }
+	.privacy-hero, .privacy-grid, .privacy-copy { width: min(1080px, calc(100% - 64px)); margin: 0 auto; }
 	.privacy-hero { padding: 72px 0 32px; }
 	.privacy-grid span { margin: 0; color: var(--accent); font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; font-size: 12px; font-weight: 700; text-transform: uppercase; }
 	h1, h2, p { margin-top: 0; }
@@ -38,6 +102,10 @@ import Topbar from '../components/Topbar.astro';
 	.privacy-grid article:nth-last-child(-n + 3) { border-bottom: 0; }
 	.privacy-grid h2 { margin: 64px 0 10px; font-size: 22px; color: var(--ink); }
 	.privacy-grid p { margin: 0; color: var(--muted); font-size: 15px; line-height: 23px; }
+	.privacy-copy { margin-bottom: 48px; border: 1px solid var(--line); border-radius: 8px; background: var(--card-bg); box-shadow: var(--shadow); padding: 28px; }
+	.privacy-copy h2 { margin: 0 0 14px; font-size: clamp(28px, 4vw, 42px); line-height: 1.1; color: var(--ink); }
+	.privacy-copy p { color: var(--body); font-size: 16px; line-height: 27px; }
+	.privacy-copy p:last-child { margin-bottom: 0; }
 	@media (max-width: 860px) { .privacy-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .privacy-grid article:nth-child(3n) { border-right: 1px solid var(--line); } .privacy-grid article:nth-child(2n) { border-right: 0; } .privacy-grid article:nth-last-child(-n + 3) { border-bottom: 1px solid var(--line); } .privacy-grid article:nth-last-child(-n + 2) { border-bottom: 0; } }
-	@media (max-width: 640px) { .privacy-hero, .privacy-grid { width: calc(100% - 32px); } .privacy-grid { grid-template-columns: 1fr; } .privacy-grid article, .privacy-grid article:nth-child(2n), .privacy-grid article:nth-child(3n) { border-right: 0; border-bottom: 1px solid var(--line); } .privacy-grid article:last-child { border-bottom: 0; } }
+	@media (max-width: 640px) { .privacy-hero, .privacy-grid, .privacy-copy { width: calc(100% - 32px); } .privacy-grid { grid-template-columns: 1fr; } .privacy-grid article, .privacy-grid article:nth-child(2n), .privacy-grid article:nth-child(3n) { border-right: 0; border-bottom: 1px solid var(--line); } .privacy-grid article:last-child { border-bottom: 0; } }
 </style>

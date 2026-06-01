@@ -1,9 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Topbar from '../components/Topbar.astro';
+import FileTransferArticles from '../components/FileTransferArticles.astro';
+
+const pageDescription =
+	'About Onlne File Share, a small browser tool for online file sharing, access keys, and quick file transfer links.';
 ---
 
-<Layout title="About Us - Onlne File Share">
+<Layout
+	title="About Onlne File Share - Simple Online File Sharing"
+	description={pageDescription}
+	keywords="about online file sharing, file transfer tool, online fileshare, file drop"
+>
 	<main class="page-shell">
 		<Topbar />
 
@@ -11,11 +19,17 @@ import Topbar from '../components/Topbar.astro';
 			<p class="eyebrow">About us</p>
 			<h1>Built for quick, simple file sharing.</h1>
 			<div class="content-card">
-				<p>Onlne File Share is a lightweight web tool for uploading a file, generating a download key, and sharing that key with someone who needs access. The goal is to keep file transfer simple, fast, and understandable.</p>
-				<p>The product is designed for people who do not want a full cloud storage workspace just to send one file. Upload, copy the key or download link, share it through a trusted channel, and let the recipient retrieve the file from the browser.</p>
-				<p>We focus on a clean interface, clear access-key behavior, mobile-friendly retrieval, and practical sharing tools such as QR codes and temporary download links.</p>
+				<p>Onlne File Share is a small web tool for sending a file with an access key. Upload the file, copy the key or link, and send it to the person who needs it.</p>
+				<p>It is made for the times when a full cloud storage workspace feels like too much for one transfer.</p>
+				<p>The site keeps the important parts visible: the key, the link, the file details, the expiry, and a QR code.</p>
+				<h2>Why this online fileshare exists</h2>
+				<p>Many file sharing tools start with accounts, folders, sync apps, and team settings. This one starts with the file.</p>
+				<h2>Who it helps</h2>
+				<p>It can help students, creators, freelancers, small teams, or anyone sending documents, ZIP archives, photos, videos, or design exports from a browser.</p>
 			</div>
 		</section>
+
+		<FileTransferArticles />
 	</main>
 </Layout>
 
@@ -23,6 +37,7 @@ import Topbar from '../components/Topbar.astro';
 	.content-page { position: relative; z-index: 1; width: min(900px, calc(100% - 48px)); margin: 0 auto; padding: 72px 0; }
 	h1 { margin: 0 0 24px; font-size: clamp(44px, 7vw, 76px); line-height: 1; color: var(--ink); }
 	.content-card { border: 1px solid var(--line); border-radius: 8px; background: var(--card-bg); box-shadow: var(--shadow); padding: 28px; }
+	.content-card h2 { margin: 26px 0 8px; font-size: 24px; color: var(--ink); }
 	.content-card p { margin: 0 0 16px; color: var(--body); font-size: 17px; line-height: 29px; }
 	.content-card p:last-child { margin-bottom: 0; }
 </style>

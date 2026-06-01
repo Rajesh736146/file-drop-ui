@@ -1,9 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Topbar from '../components/Topbar.astro';
+import FileTransferArticles from '../components/FileTransferArticles.astro';
+
+const pageDescription =
+	'Contact Rajesh Sarkar for questions about Onlne File Share, upload issues, download lookup, or access keys.';
 ---
 
-<Layout title="Contact Us - Onlne File Share">
+<Layout
+	title="Contact Onlne File Share - Upload and File Transfer Help"
+	description={pageDescription}
+	keywords="contact file sharing support, file upload help, file transfer help, access key help"
+>
 	<main class="page-shell">
 		<Topbar active="contact" />
 
@@ -22,6 +30,55 @@ import Topbar from '../components/Topbar.astro';
 				<div><span>Phone</span><a href="tel:+918927544778">8927544778</a></div>
 			</section>
 		</section>
+
+		<section class="contact-copy" aria-labelledby="contact-seo-title">
+			<p class="eyebrow">Support</p>
+			<h2 id="contact-seo-title">Something not working?</h2>
+			<p>
+				Use the contact details here for upload issues, download lookup questions, feedback, or
+				ideas that would make the file sharing flow easier to use.
+			</p>
+			<p>
+				The contact page is here because file sharing problems are often small but annoying. A file
+				may fail to upload, a key may not open the expected download, a QR code may be hard to scan,
+				or a mobile browser may behave differently from a desktop browser. If something like that
+				happens, the details on this page are the best place to start.
+			</p>
+			<p>
+				When you ask for help, include the page you were using, what you expected to happen, and
+				what actually happened. For upload problems, it helps to mention the file type and rough
+				size. For retrieve problems, mention whether you used a short key, a full link, or a QR
+				code. Do not send private access keys in public places. If a key is sensitive, describe the
+				problem first and wait before sharing anything private.
+			</p>
+			<p>
+				Onlne File Share is meant for simple online file sharing and online file transfer. That
+				means the site should be easy to use even when someone arrives from a quick search such as
+				online file drop, file transfer link, online fileshare, onlne file shaing, or online file
+				frop. If a label, button, upload step, or download message feels confusing, that feedback
+				is useful. Small wording changes can make the page much clearer for the next person.
+			</p>
+			<p>
+				You can also use this page for suggestions. Maybe the upload card should explain a file
+				limit more clearly. Maybe the retrieve page needs a better error message. Maybe mobile
+				layout needs more room in one area. The site has already been tuned around practical use:
+				uploading a file, copying a key, scanning a QR code, and downloading from another device.
+				Good feedback helps keep that flow simple instead of turning it into a crowded storage app.
+			</p>
+			<p>
+				For business, school, creator, or personal use, the best file transfer tool is the one that
+				does not get in the way. If something does get in the way, please share the details. The
+				goal is not to add every feature possible. The goal is to make the common jobs reliable:
+				send a file, share a key, retrieve the file, and move on.
+			</p>
+			<p>
+				If your question is about privacy, check the privacy page too. If your question is about
+				what should or should not be uploaded, read the terms page. For everything else, use the
+				contact information above and describe the issue as plainly as you can.
+			</p>
+		</section>
+
+		<FileTransferArticles />
 	</main>
 </Layout>
 
@@ -37,5 +94,9 @@ import Topbar from '../components/Topbar.astro';
 	.contact-card span, .contact-card strong, .contact-card a { display: block; }
 	.contact-card span { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; }
 	.contact-card strong, .contact-card a { margin-top: 8px; color: var(--ink); font-size: 20px; font-weight: 650; text-decoration: none; overflow-wrap: anywhere; }
+	.contact-copy { position: relative; z-index: 1; width: min(900px, calc(100% - 48px)); margin: -28px auto 48px; border: 1px solid var(--line); border-radius: 8px; background: var(--card-bg); box-shadow: var(--shadow); padding: 28px; }
+	.contact-copy h2 { margin: 0 0 14px; font-size: clamp(28px, 4vw, 42px); line-height: 1.1; color: var(--ink); }
+	.contact-copy p { color: var(--body); font-size: 16px; line-height: 27px; }
+	.contact-copy p:last-child { margin-bottom: 0; }
 	@media (max-width: 760px) { .contact-page { grid-template-columns: 1fr; } }
 </style>

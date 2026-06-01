@@ -3,7 +3,7 @@
   <!-- Homepage - highest priority, most frequently updated -->
   <url>
     <loc>https://onlnefileshare.com/</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-06-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -11,7 +11,7 @@
   <!-- Upload page - core functionality -->
   <url>
     <loc>https://onlnefileshare.com/upload</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-06-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -19,7 +19,7 @@
   <!-- Retrieve page - core functionality -->
   <url>
     <loc>https://onlnefileshare.com/retrieve</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-06-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -27,7 +27,7 @@
   <!-- Privacy policy -->
   <url>
     <loc>https://onlnefileshare.com/privacy</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-06-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -35,7 +35,7 @@
   <!-- About page -->
   <url>
     <loc>https://onlnefileshare.com/about</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-06-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -43,7 +43,7 @@
   <!-- Terms and conditions -->
   <url>
     <loc>https://onlnefileshare.com/terms</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-06-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
@@ -51,7 +51,7 @@
   <!-- Contact page -->
   <url>
     <loc>https://onlnefileshare.com/contact</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-06-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>

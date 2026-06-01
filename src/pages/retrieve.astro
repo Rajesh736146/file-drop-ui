@@ -1,9 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Topbar from '../components/Topbar.astro';
+import FileTransferArticles from '../components/FileTransferArticles.astro';
+
+const pageTitle = 'Retrieve Shared File - Download by Access Key | Onlne File Share';
+const pageDescription =
+	'Paste an access key to look up a shared file and open its temporary download link from your phone or computer.';
+const pageKeywords =
+	'retrieve file, download file by access key, file transfer key, online file transfer download, shared file lookup';
 ---
 
-<Layout>
+<Layout title={pageTitle} description={pageDescription} keywords={pageKeywords}>
 	<main class="page-shell">
 		<Topbar active="retrieve" />
 
@@ -38,6 +45,59 @@ import Topbar from '../components/Topbar.astro';
 				</div>
 			</aside>
 		</section>
+
+		<section class="seo-panel" aria-labelledby="retrieve-seo-title">
+			<p class="eyebrow">Access key retrieval</p>
+			<h2 id="retrieve-seo-title">Got a key? Paste it here.</h2>
+			<p>
+				If someone sent you an access key, paste it here. The page will show the file details and
+				the download button if the key is still valid.
+			</p>
+			<p>
+				This is handy for phone-to-PC transfers, client files, and one-time downloads. Do not post
+				the key publicly; anyone with a valid key may be able to open the file.
+			</p>
+			<p>
+				The retrieve page is for the person on the receiving side of the file transfer. Maybe
+				someone sent you a short code in a chat message. Maybe you scanned a QR code from their
+				phone. Maybe you opened a link on your laptop after uploading from mobile. Whatever the
+				path, this page keeps the next step clear: enter the key, check the file, and download it.
+			</p>
+			<p>
+				People look for this kind of page in different ways. Some search for online file transfer,
+				some search for online file sharing, and some type things quickly, like onlne file shaing
+				or online file frop. The words are different, but the job is usually the same. You have a
+				file waiting somewhere, and you need a simple way to open it from the browser you are using
+				now.
+			</p>
+			<p>
+				Before downloading, look at the file name and size. If the sender meant to share a PDF but
+				you see a different file type, ask them before opening it. If you do not recognize the
+				sender, be careful. Access keys are useful because they are easy to pass around, but that
+				also means they should be handled with a bit of common sense. A key is not something to
+				paste in public comments or group spaces where everyone can see it.
+			</p>
+			<p>
+				The retrieve flow is also useful for moving your own files between devices. Upload from a
+				phone, copy the key, then enter it on a desktop. Or upload from a computer and open the QR
+				code on a phone. This is often faster than mailing the file to yourself, especially when
+				the file is large or the mail app keeps refusing the attachment.
+			</p>
+			<p>
+				This page does not ask the recipient to build an account or install an app. That is the
+				point. A small online fileshare should be easy for both sides: the sender uploads, the
+				recipient retrieves, and both people can get back to whatever they were doing. If the key
+				has expired or the file cannot be found, ask the sender to upload it again and send a fresh
+				key.
+			</p>
+			<p>
+				For work files, school files, photos, videos, ZIP archives, and quick browser downloads,
+				the retrieve page gives the receiving person a direct path. It is not a storage dashboard.
+				It is just the place where a shared key turns back into a downloadable file.
+			</p>
+		</section>
+
+		<FileTransferArticles />
 
 		<script>
 			const API_BASE = 'https://filedrop-nine.vercel.app';
@@ -128,7 +188,8 @@ import Topbar from '../components/Topbar.astro';
 </Layout>
 
 <style>
-	.retrieve-layout { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(460px, 720px) minmax(240px, 0.55fr); gap: 24px; align-items: stretch; width: min(1080px, calc(100% - 64px)); margin: 0 auto; padding: 76px 0; }
+	.retrieve-layout { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 720px) minmax(220px, 0.45fr); gap: 24px; align-items: stretch; width: min(1080px, calc(100% - 64px)); margin: 0 auto; padding: 76px 0 28px; }
+	.seo-panel { position: relative; z-index: 1; width: min(1080px, calc(100% - 64px)); margin: 0 auto 48px; border: 1px solid var(--line); border-radius: 8px; background: var(--card-bg); box-shadow: var(--shadow); padding: 28px; }
 	.retrieve-card, .side-panel { border: 1px solid var(--line); border-radius: 8px; background: var(--card-bg); box-shadow: var(--shadow); }
 	.retrieve-card { position: relative; border-color: transparent; background: linear-gradient(var(--surface-solid), var(--surface-solid)) padding-box, var(--gradient-border) border-box; box-shadow: 0 28px 90px rgba(0, 112, 243, 0.08), 0 0 0 4px rgba(0, 112, 243, 0.04); padding: 32px; overflow: hidden; }
 	@media (prefers-color-scheme: dark) { .retrieve-card { box-shadow: 0 28px 90px rgba(245, 197, 24, 0.08), 0 0 0 4px rgba(245, 197, 24, 0.04); } }
@@ -140,6 +201,9 @@ import Topbar from '../components/Topbar.astro';
 	.lookup-title-row span { border: 1px solid var(--accent-dim); border-radius: 999px; background: var(--accent-dim); color: var(--accent); padding: 6px 10px; font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; font-size: 11px; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
 	h1, p { margin-top: 0; }
 	h1 { max-width: 620px; margin-bottom: 16px; font-size: clamp(44px, 6vw, 74px); line-height: 1; color: var(--ink); }
+	.seo-panel h2 { margin: 0 0 14px; font-size: clamp(28px, 4vw, 42px); line-height: 1.1; color: var(--ink); }
+	.seo-panel p { color: var(--body); font-size: 16px; line-height: 27px; }
+	.seo-panel p:last-child { margin-bottom: 0; }
 	.subtitle { max-width: 560px; margin-bottom: 28px; color: var(--body); font-size: 18px; line-height: 29px; }
 	.lookup-form { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; }
 	.lookup-form input { height: 50px; border: 1px solid var(--input-border); border-radius: 6px; background: var(--input-bg); padding: 0 14px; font-size: 16px; color: var(--ink); }
@@ -158,6 +222,6 @@ import Topbar from '../components/Topbar.astro';
 	.side-panel strong, .side-panel span { display: block; }
 	.side-panel strong { font-size: 16px; color: var(--ink); }
 	.side-panel span { margin-top: 7px; color: var(--muted); font-size: 14px; line-height: 22px; }
-	@media (max-width: 860px) { .retrieve-layout { grid-template-columns: 1fr; width: min(720px, calc(100% - 32px)); } }
+	@media (max-width: 860px) { .retrieve-layout, .seo-panel { grid-template-columns: 1fr; width: min(720px, calc(100% - 32px)); } }
 	@media (max-width: 560px) { .lookup-form { grid-template-columns: 1fr; } }
 </style>

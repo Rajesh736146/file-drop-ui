@@ -11,6 +11,16 @@ const {
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString();
 const imageUrl = new URL(image, Astro.site ?? Astro.url).toString();
+const siteSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'WebSite',
+	name: 'Onlne File Share',
+	alternateName: ['Online File Share', 'Online Fileshare', 'File Drop'],
+	url: new URL('/', Astro.site ?? Astro.url).toString(),
+	description:
+		'Upload files from a browser, share access keys, and open temporary download links.',
+	inLanguage: 'en',
+};
 ---
 
 <!doctype html>
@@ -57,6 +67,7 @@ const imageUrl = new URL(image, Astro.site ?? Astro.url).toString();
 		<meta name="twitter:image" content={imageUrl} />
 		<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 		<meta name="theme-color" content="#0a0a0f" media="(prefers-color-scheme: dark)" />
+		<script type="application/ld+json" set:html={JSON.stringify(siteSchema)} />
 		<title>{title}</title>
 	</head>
 	<body>

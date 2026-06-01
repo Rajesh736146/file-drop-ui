@@ -1,10 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Topbar from '../components/Topbar.astro';
+import FileTransferArticles from '../components/FileTransferArticles.astro';
 import '../styles/home.css';
+
+const pageTitle = 'Upload Files Online - Create a File Transfer Link | Onlne File Share';
+const pageDescription =
+	'Upload a file from your browser and get an access key, QR code, and download link for quick online file sharing.';
+const pageKeywords =
+	'upload files online, online file upload, create file transfer link, file drop upload, send large files, online file sharing';
 ---
 
-<Layout>
+<Layout title={pageTitle} description={pageDescription} keywords={pageKeywords}>
 	<main class="page-shell">
 		<Topbar active="upload" />
 
@@ -46,9 +53,11 @@ import '../styles/home.css';
 					<a id="downloadLink" href="#" rel="noreferrer" data-download-link>Download file</a>
 				</div>
 			</section>
-		</section>
+			</section>
 
-		<div class="success-dialog" id="successDialog" hidden>
+			<FileTransferArticles />
+
+			<div class="success-dialog" id="successDialog" hidden>
 			<div class="dialog-backdrop" data-close-dialog></div>
 			<section class="dialog-panel" role="dialog" aria-modal="true" aria-labelledby="successTitle">
 				<button class="dialog-close" type="button" data-close-dialog aria-label="Close dialog">x</button>
@@ -280,9 +289,16 @@ import '../styles/home.css';
 </Layout>
 
 <style>
-	.upload-layout { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(320px, 0.65fr) minmax(460px, 680px); gap: 44px; align-items: center; width: min(1120px, calc(100% - 64px)); margin: 0 auto; padding: 64px 0; }
-	h1, h2, p { margin-top: 0; }
-	h1 { max-width: 500px; margin-bottom: 18px; font-size: clamp(44px, 6vw, 72px); line-height: 1; color: var(--ink); }
+		.upload-layout { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(320px, 0.65fr) minmax(460px, 680px); gap: 44px; align-items: center; width: min(1120px, calc(100% - 64px)); margin: 0 auto; padding: 64px 0; }
+		.seo-panel, .article-section { position: relative; z-index: 1; width: min(900px, calc(100% - 48px)); margin: 0 auto 48px; border: 1px solid var(--line); border-radius: 8px; background: var(--card-bg); box-shadow: var(--shadow); padding: 28px; }
+		h1, h2, p { margin-top: 0; }
+		h1 { max-width: 500px; margin-bottom: 18px; font-size: clamp(44px, 6vw, 72px); line-height: 1; color: var(--ink); }
+		.seo-panel h2, .article-section > h2 { margin: 0 0 14px; font-size: clamp(28px, 4vw, 42px); line-height: 1.1; color: var(--ink); }
+		.seo-panel p, .article-section p { color: var(--body); font-size: 16px; line-height: 27px; }
+		.seo-panel p:last-child, .article-section p:last-child { margin-bottom: 0; }
+		.article-grid { display: grid; gap: 14px; margin-top: 20px; }
+		.article-grid article { border: 1px solid var(--line); border-radius: 8px; background: var(--card-inner); padding: 20px; }
+		.article-grid h3 { margin: 0 0 10px; font-size: 22px; line-height: 1.2; color: var(--ink); }
 	.page-copy p:last-child { max-width: 430px; color: var(--body); font-size: 18px; line-height: 29px; }
 	.card-head p, .card-head span { margin: 0; font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; font-size: 12px; text-transform: uppercase; }
 	.upload-card { border: 1px solid transparent; border-radius: 8px; background: linear-gradient(var(--surface-solid), var(--surface-solid)) padding-box, var(--gradient-border) border-box; box-shadow: var(--shadow); padding: 18px; }
@@ -300,7 +316,7 @@ import '../styles/home.css';
 	:global([data-theme="dark"]) .upload-icon { background: #1a1a28; box-shadow: 0 18px 42px rgba(0, 0, 0, 0.4); }
 	.upload-icon span { position: absolute; inset: 3px; z-index: 1; border-radius: 21px; background: var(--surface-solid); }
 	:global([data-theme="dark"]) .upload-icon span { background: #1a1a28; }
-	.upload-icon::before { content: ""; position: absolute; inset: -28px; background: conic-gradient(from 0deg, #0070f3, #00dfd8, #ff0080, #f9cb28, #0070f3); transform: rotate(22deg); }
+	.upload-icon::before { content: ""; position: absolute; inset: -28px; background: conic-gradient(from 0deg, #0070f3, #00dfd8, #ff0080, #f9cb28, #0070f3); animation: ringSpin 8s linear infinite; will-change: transform; }
 	:global([data-theme="dark"]) .upload-icon::before { background: conic-gradient(from 0deg, #f5c518, #c89600, #f5c518, #8b6914, #f5c518); }
 	.upload-icon::after { content: ""; position: absolute; z-index: 2; left: 50%; top: 50%; width: 28px; height: 3px; background: var(--ink); transform: translate(-50%, -50%); }
 	.upload-icon span::after { content: ""; position: absolute; left: 50%; top: 50%; width: 3px; height: 28px; background: var(--ink); transform: translate(-50%, -50%); }
