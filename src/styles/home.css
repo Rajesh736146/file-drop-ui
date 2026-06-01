@@ -588,9 +588,9 @@
   .card-head strong { margin-top: 2px; font-size: 16px; }
   .app-shell .card-head p, .app-shell .card-head span { font-size: 10px; }
   .card-head span { padding: 5px 8px; }
-  .transfer-card .dropzone, .dropzone { min-height: 132px; padding: 14px; }
+  .transfer-card .dropzone, .dropzone { min-height: 160px; padding: 16px; }
   .dropzone::before { inset: 10px; }
-  .upload-icon { width: 46px; height: 46px; margin-bottom: 8px; border-radius: 14px; }
+  .upload-icon { width: 50px; height: 50px; margin-bottom: 10px; border-radius: 15px; }
   .upload-icon span { border-radius: 11px; }
   .upload-icon::after { width: 22px; height: 3px; }
   .upload-icon span::after { width: 3px; height: 22px; }
