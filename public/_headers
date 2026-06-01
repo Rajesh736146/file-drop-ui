@@ -1,3 +1,10 @@
+# Deindex the pages.dev domain
 https://file-drop-ui.pages.dev/*
   X-Robots-Tag: noindex, nofollow
 
+https://*.file-drop-ui.pages.dev/*
+  X-Robots-Tag: noindex, nofollow
+
+# Serve sitemap with correct content type
+/sitemap.xml
+  Content-Type: application/xml; charset=utf-8
