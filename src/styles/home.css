@@ -10,7 +10,6 @@
     linear-gradient(180deg, var(--surface-solid) 0%, var(--soft) 100%);
   background-size: 54px 54px, 54px 54px, auto, auto, auto;
   color: var(--ink);
-  animation: backgroundDrift 18s ease-in-out infinite alternate;
   overflow: hidden;
 }
 
@@ -48,14 +47,12 @@
   left: -10vw;
   top: 18vh;
   background: var(--blob1);
-  animation: blobOne 16s ease-in-out infinite alternate;
 }
 
 .app-shell::after {
   right: -12vw;
   top: 8vh;
   background: var(--blob2);
-  animation: blobTwo 18s ease-in-out infinite alternate;
 }
 
 /* ─── Hero Grid ─── */
@@ -138,12 +135,7 @@
 }
 
 .live-status span::after {
-  content: "";
-  position: absolute;
-  inset: -7px;
-  border: 1px solid rgba(0, 168, 98, 0.45);
-  border-radius: inherit;
-  animation: livePing 1.5s ease-out infinite;
+  display: none;
 }
 
 [data-theme="dark"] .live-status {
@@ -249,7 +241,6 @@
   border-radius: 8px;
   opacity: 0;
   transform: scale(0.96);
-  animation: uploadPulse 2.8s ease-in-out infinite;
   pointer-events: none;
 }
 
@@ -327,8 +318,7 @@
   position: absolute;
   inset: -26px;
   background: conic-gradient(from 0deg, #0070f3, #00dfd8, #ff0080, #f9cb28, #0070f3);
-  animation: ringSpin 5.5s linear infinite;
-  will-change: transform;
+  transform: rotate(22deg);
 }
 
 [data-theme="dark"] .upload-icon::before {

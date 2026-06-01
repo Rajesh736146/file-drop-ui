@@ -171,7 +171,6 @@
     linear-gradient(180deg, var(--surface-solid) 0%, var(--soft) 100%);
   background-size: 54px 54px, 54px 54px, auto, auto;
   color: var(--ink);
-  animation: backgroundDrift 18s ease-in-out infinite alternate;
   overflow: hidden;
 }
 
@@ -197,7 +196,6 @@
   left: -10vw;
   top: 18vh;
   background: var(--blob1);
-  animation: blobOne 16s ease-in-out infinite alternate;
 }
 
 .page-shell::after,
@@ -205,7 +203,6 @@
   right: -12vw;
   top: 8vh;
   background: var(--blob2);
-  animation: blobTwo 18s ease-in-out infinite alternate;
 }
 
 /* ─── Buttons ─── */

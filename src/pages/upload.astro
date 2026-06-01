@@ -292,7 +292,7 @@ import '../styles/home.css';
 	.card-head span { border: 1px solid var(--accent-dim); border-radius: 999px; background: var(--accent-dim); color: var(--accent); padding: 6px 10px; font-weight: 700; }
 	.dropzone { position: relative; display: grid; place-items: center; min-height: 430px; border: 1px dashed var(--input-border); border-radius: 8px; background: radial-gradient(circle at 50% 48%, var(--accent-dim), transparent 46%), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px), linear-gradient(180deg, var(--grid-line) 1px, transparent 1px), var(--card-inner); background-size: auto, 36px 36px, 36px 36px; padding: 28px; text-align: center; cursor: pointer; transition: border-color 180ms ease, transform 180ms ease; }
 	:global([data-theme="dark"]) .dropzone { border-color: var(--input-border); }
-	.dropzone::before { content: ""; position: absolute; inset: 22px; border: 1px solid var(--accent-dim); border-radius: 8px; opacity: 0; transform: scale(0.96); animation: uploadPulse 2.8s ease-in-out infinite; pointer-events: none; }
+	.dropzone::before { content: ""; position: absolute; inset: 22px; border: 1px solid var(--accent-dim); border-radius: 8px; opacity: 0; transform: scale(0.96); pointer-events: none; }
 	.dropzone:hover { border-color: var(--ink); transform: translateY(-1px); }
 	:global([data-theme="dark"]) .dropzone:hover { border-color: var(--accent); }
 	.dropzone input { position: absolute; inline-size: 1px; block-size: 1px; opacity: 0; pointer-events: none; }
@@ -300,7 +300,7 @@ import '../styles/home.css';
 	:global([data-theme="dark"]) .upload-icon { background: #1a1a28; box-shadow: 0 18px 42px rgba(0, 0, 0, 0.4); }
 	.upload-icon span { position: absolute; inset: 3px; z-index: 1; border-radius: 21px; background: var(--surface-solid); }
 	:global([data-theme="dark"]) .upload-icon span { background: #1a1a28; }
-	.upload-icon::before { content: ""; position: absolute; inset: -28px; background: conic-gradient(from 0deg, #0070f3, #00dfd8, #ff0080, #f9cb28, #0070f3); animation: ringSpin 5.5s linear infinite; will-change: transform; }
+	.upload-icon::before { content: ""; position: absolute; inset: -28px; background: conic-gradient(from 0deg, #0070f3, #00dfd8, #ff0080, #f9cb28, #0070f3); transform: rotate(22deg); }
 	:global([data-theme="dark"]) .upload-icon::before { background: conic-gradient(from 0deg, #f5c518, #c89600, #f5c518, #8b6914, #f5c518); }
 	.upload-icon::after { content: ""; position: absolute; z-index: 2; left: 50%; top: 50%; width: 28px; height: 3px; background: var(--ink); transform: translate(-50%, -50%); }
 	.upload-icon span::after { content: ""; position: absolute; left: 50%; top: 50%; width: 3px; height: 28px; background: var(--ink); transform: translate(-50%, -50%); }
