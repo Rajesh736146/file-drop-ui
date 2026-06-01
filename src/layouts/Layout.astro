@@ -69,6 +69,14 @@ const siteSchema = {
 		<meta name="theme-color" content="#0a0a0f" media="(prefers-color-scheme: dark)" />
 		<script type="application/ld+json" set:html={JSON.stringify(siteSchema)} />
 		<title>{title}</title>
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-WGTNTPVEFV" is:inline></script>
+		<script is:inline>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'G-WGTNTPVEFV');
+		</script>
 	</head>
 	<body>
 		<slot />
