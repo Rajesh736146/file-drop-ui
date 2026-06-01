@@ -21,15 +21,18 @@ const imageUrl = new URL(image, Astro.site ?? Astro.url).toString();
 		<script is:inline>
 			(function() {
 				var saved = localStorage.getItem('theme');
+				var hour = new Date().getHours();
+				var isNight = hour >= 19 || hour < 6;
+				if (!isNight) {
+					localStorage.removeItem('theme');
+					document.documentElement.setAttribute('data-theme', 'light');
+					return;
+				}
 				if (saved) {
 					document.documentElement.setAttribute('data-theme', saved);
 					return;
 				}
-				var hour = new Date().getHours();
-				var isNight = hour >= 19 || hour < 6;
-				var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-				var theme = (isNight || prefersDark) ? 'dark' : 'light';
-				document.documentElement.setAttribute('data-theme', theme);
+				document.documentElement.setAttribute('data-theme', 'dark');
 			})();
 		</script>
 		<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />

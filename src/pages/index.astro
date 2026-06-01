@@ -100,14 +100,48 @@ const faqSchema = {
 
 		<section class="hero">
 			<div class="hero-copy">
-				<p class="live-status"><span aria-hidden="true"></span>Server is awaiting</p>
+				<p class="live-status"><span aria-hidden="true"></span>Ready For Upload</p>
 				<h1>Upload files. Share secure download keys.</h1>
 				<p class="hero-subtitle">
 					A clean file drop for quick sharing: choose a file, upload it securely, and share a
 					short access key when it is ready.
 				</p>
+			</div>
 
-				<section class="lookup-card" id="retrieve" aria-label="Retrieve a file">
+			<section class="upload-card transfer-card" id="upload" aria-label="Upload and retrieve files">
+				<div class="transfer-upload">
+					<div class="card-head">
+						<div>
+							<p>Storage target</p>
+							<strong>Secure file storage</strong>
+						</div>
+						<span id="modePill">Ready</span>
+					</div>
+
+					<label class="dropzone">
+						<input id="fileInput" type="file" />
+						<span class="upload-icon" aria-hidden="true"><span></span></span>
+						<strong id="fileTitle">Choose a file</strong>
+						<small id="fileMeta">Large files are handled reliably in the background.</small>
+					</label>
+
+					<div class="progress-wrap" aria-label="Upload progress">
+						<div class="progress-track">
+							<span id="progressBar"></span>
+						</div>
+						<p id="statusText">Waiting for a file.</p>
+					</div>
+
+					<div class="result-box" id="resultBox" hidden>
+						<div>
+							<small>Access key</small>
+							<strong id="accessKey">------</strong>
+						</div>
+						<a id="downloadLink" href="#" rel="noreferrer" data-download-link>Download file</a>
+					</div>
+				</div>
+
+				<section class="lookup-card transfer-lookup" id="retrieve" aria-label="Retrieve a file">
 					<div class="lookup-head">
 						<span class="lookup-icon" aria-hidden="true"></span>
 						<div>
@@ -122,38 +156,6 @@ const faqSchema = {
 					</form>
 					<p id="lookupStatus" class="lookup-status">Paste an access key to open its download link.</p>
 				</section>
-			</div>
-
-			<section class="upload-card" id="upload" aria-label="Upload file">
-				<div class="card-head">
-					<div>
-						<p>Storage target</p>
-						<strong>Secure file storage</strong>
-					</div>
-					<span id="modePill">Ready</span>
-				</div>
-
-				<label class="dropzone">
-					<input id="fileInput" type="file" />
-					<span class="upload-icon" aria-hidden="true"><span></span></span>
-					<strong id="fileTitle">Choose a file</strong>
-					<small id="fileMeta">Large files are handled reliably in the background.</small>
-				</label>
-
-				<div class="progress-wrap" aria-label="Upload progress">
-					<div class="progress-track">
-						<span id="progressBar"></span>
-					</div>
-					<p id="statusText">Waiting for a file.</p>
-				</div>
-
-				<div class="result-box" id="resultBox" hidden>
-					<div>
-						<small>Access key</small>
-						<strong id="accessKey">------</strong>
-					</div>
-					<a id="downloadLink" href="#" rel="noreferrer" data-download-link>Download file</a>
-				</div>
 			</section>
 		</section>
 
@@ -334,7 +336,10 @@ const faqSchema = {
 					<div>
 						<strong>Scan to download</strong>
 						<span>QR code opens the generated CDN download link.</span>
-						<a id="dialogOpenLink" href="#" rel="noreferrer" data-download-link>Download file</a>
+						<div class="dialog-actions">
+							<a id="dialogOpenLink" href="#" rel="noreferrer" data-download-link>Download file</a>
+							<a id="dialogWhatsappShare" class="whatsapp-share" href="#" target="_blank" rel="noreferrer">Share on WhatsApp</a>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -362,6 +367,7 @@ const faqSchema = {
 		const dialogDownloadUrl = document.querySelector('#dialogDownloadUrl');
 		const dialogQr = document.querySelector('#dialogQr');
 		const dialogOpenLink = document.querySelector('#dialogOpenLink');
+		const dialogWhatsappShare = document.querySelector('#dialogWhatsappShare');
 		const dialogFileMeta = document.querySelector('#dialogFileMeta');
 
 		const formatBytes = (bytes) => {
@@ -392,6 +398,10 @@ const faqSchema = {
 			if (!(link instanceof HTMLAnchorElement)) return;
 			link.download = filename || 'download';
 			link.dataset.filename = filename || 'download';
+		};
+
+		const getRetrieveUrl = (accessKey) => {
+			return `${window.location.origin}/retrieve/?key=${encodeURIComponent(accessKey)}`;
 		};
 
 		const setProgress = (value) => {
@@ -500,6 +510,11 @@ const faqSchema = {
 			if (dialogOpenLink) {
 				dialogOpenLink.href = data.download_url;
 				bindDownloadLink(dialogOpenLink, data.name);
+			}
+			if (dialogWhatsappShare instanceof HTMLAnchorElement) {
+				const retrieveUrl = getRetrieveUrl(data.access_key);
+				const shareText = `Your file is ready to download:\n${retrieveUrl}\n\nDirect download:\n${data.download_url}\n\nAccess key: ${data.access_key}`;
+				dialogWhatsappShare.href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
 			}
 			if (dialogQr) {
 				dialogQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(data.download_url)}`;

@@ -79,7 +79,10 @@ import '../styles/home.css';
 					<div>
 						<strong>Scan to download</strong>
 						<span>QR code opens the generated CDN download link.</span>
-						<a id="dialogOpenLink" href="#" rel="noreferrer" data-download-link>Download file</a>
+						<div class="dialog-actions">
+							<a id="dialogOpenLink" href="#" rel="noreferrer" data-download-link>Download file</a>
+							<a id="dialogWhatsappShare" class="whatsapp-share" href="#" target="_blank" rel="noreferrer">Share on WhatsApp</a>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -102,6 +105,7 @@ import '../styles/home.css';
 			const dialogDownloadUrl = document.querySelector<HTMLInputElement>('#dialogDownloadUrl');
 			const dialogQr = document.querySelector<HTMLImageElement>('#dialogQr');
 			const dialogOpenLink = document.querySelector<HTMLAnchorElement>('#dialogOpenLink');
+			const dialogWhatsappShare = document.querySelector<HTMLAnchorElement>('#dialogWhatsappShare');
 			const dialogFileMeta = document.querySelector<HTMLElement>('#dialogFileMeta');
 
 			const formatBytes = (bytes: number) => {
@@ -133,6 +137,10 @@ import '../styles/home.css';
 				link.dataset.filename = filename || 'download';
 			};
 
+			const getRetrieveUrl = (accessKey: string) => {
+				return `${window.location.origin}/retrieve/?key=${encodeURIComponent(accessKey)}`;
+			};
+
 			const readError = async (response: Response) => {
 				try {
 					const data = await response.json();
@@ -158,6 +166,11 @@ import '../styles/home.css';
 				if (dialogOpenLink) {
 					dialogOpenLink.href = data.download_url;
 					bindDownloadLink(dialogOpenLink, data.name);
+				}
+				if (dialogWhatsappShare) {
+					const retrieveUrl = getRetrieveUrl(data.access_key);
+					const shareText = `Your file is ready to download:\n${retrieveUrl}\n\nDirect download:\n${data.download_url}\n\nAccess key: ${data.access_key}`;
+					dialogWhatsappShare.href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
 				}
 				if (dialogQr) {
 					dialogQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(data.download_url)}`;
@@ -304,10 +317,10 @@ import '../styles/home.css';
 	.result-box small { color: var(--muted); }
 	.result-box strong { font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; font-size: 24px; color: var(--accent); }
 	.result-box a { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; border: 1px solid var(--btn-bg); border-radius: 6px; background: var(--btn-bg); color: var(--btn-color); padding: 0 14px; text-decoration: none; font-size: 14px; font-weight: 600; white-space: nowrap; }
-	.success-dialog { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 24px; }
+	.success-dialog { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 24px; overflow-y: auto; }
 	.dialog-backdrop { position: absolute; inset: 0; background: rgba(255, 255, 255, 0.72); backdrop-filter: blur(18px); }
 	:global([data-theme="dark"]) .dialog-backdrop { background: rgba(10, 10, 15, 0.85); }
-	.dialog-panel { position: relative; width: min(640px, 100%); border: 1px solid transparent; border-radius: 8px; background: linear-gradient(var(--surface-solid), var(--surface-solid)) padding-box, var(--gradient-border) border-box; box-shadow: 0 30px 110px rgba(0, 0, 0, 0.18); padding: 24px; animation: dialogIn 260ms ease-out; }
+	.dialog-panel { position: relative; width: min(640px, 100%); max-height: calc(100dvh - 48px); overflow-y: auto; overscroll-behavior: contain; border: 1px solid transparent; border-radius: 8px; background: linear-gradient(var(--surface-solid), var(--surface-solid)) padding-box, var(--gradient-border) border-box; box-shadow: 0 30px 110px rgba(0, 0, 0, 0.18); padding: 24px; animation: dialogIn 260ms ease-out; }
 	:global([data-theme="dark"]) .dialog-panel { box-shadow: 0 30px 110px rgba(0, 0, 0, 0.6); }
 	.dialog-close { position: absolute; top: 14px; right: 14px; display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid var(--line); border-radius: 50%; background: var(--surface-solid); color: var(--muted); font-size: 14px; }
 	.dialog-status { width: 54px; height: 54px; margin-bottom: 16px; border-radius: 50%; background: var(--btn-bg); position: relative; animation: successPop 520ms ease-out; }
@@ -319,6 +332,8 @@ import '../styles/home.css';
 	.option-row div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
 	.option-row input { min-width: 0; height: 40px; border: 1px solid var(--input-border); border-radius: 6px; background: var(--input-bg); padding: 0 12px; color: var(--ink); font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; font-size: 13px; }
 	.option-row button, .qr-section a { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; border: 1px solid var(--btn-bg); border-radius: 6px; background: var(--btn-bg); color: var(--btn-color); padding: 0 12px; text-decoration: none; font-size: 13px; font-weight: 600; white-space: nowrap; }
+	.dialog-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+	.qr-section a.whatsapp-share { border-color: #1fa855; background: #1fa855; color: #ffffff; }
 	.qr-section { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 16px; align-items: center; margin-top: 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--card-inner); padding: 14px; }
 	.qr-section img { width: 132px; height: 132px; border: 1px solid var(--line); border-radius: 8px; background: #ffffff; padding: 8px; }
 	.qr-section strong, .qr-section span { display: block; }
@@ -326,5 +341,14 @@ import '../styles/home.css';
 	.qr-section span { margin: 6px 0 12px; color: var(--muted); font-size: 14px; line-height: 21px; }
 	@media (prefers-reduced-motion: reduce) { .upload-icon::before, .dropzone::before { animation: none; } }
 	@media (max-width: 860px) { .upload-layout { grid-template-columns: 1fr; width: min(720px, calc(100% - 32px)); } }
-	@media (max-width: 560px) { .option-row div, .qr-section { grid-template-columns: 1fr; } .qr-section img { width: 150px; height: 150px; } }
+	@media (max-width: 560px) {
+		.success-dialog { place-items: start center; padding: 12px; }
+		.dialog-panel { max-height: calc(100dvh - 24px); padding: 18px; }
+		.dialog-panel h2 { margin-right: 28px; font-size: 28px; }
+		.dialog-status { width: 44px; height: 44px; margin-bottom: 12px; }
+		.dialog-status::after { left: 15px; top: 11px; width: 12px; height: 20px; }
+		.option-row div, .qr-section { grid-template-columns: 1fr; }
+		.dialog-actions { display: grid; grid-template-columns: 1fr; }
+		.qr-section img { width: 112px; height: 112px; }
+	}
 </style>

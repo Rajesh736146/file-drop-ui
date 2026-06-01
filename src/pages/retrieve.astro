@@ -79,8 +79,7 @@ import Topbar from '../components/Topbar.astro';
 				}
 			};
 
-			lookupForm?.addEventListener('submit', async (event) => {
-				event.preventDefault();
+			const lookupFile = async () => {
 				const key = lookupKey?.value.trim();
 				if (!key || !lookupStatus || !lookupResult) return;
 
@@ -112,7 +111,18 @@ import Topbar from '../components/Topbar.astro';
 				} catch (error) {
 					lookupStatus.textContent = error instanceof Error ? error.message : 'File lookup failed.';
 				}
+			};
+
+			lookupForm?.addEventListener('submit', async (event) => {
+				event.preventDefault();
+				lookupFile();
 			});
+
+			const prefilledKey = new URLSearchParams(window.location.search).get('key');
+			if (prefilledKey && lookupKey instanceof HTMLInputElement) {
+				lookupKey.value = prefilledKey;
+				lookupFile();
+			}
 		</script>
 	</main>
 </Layout>

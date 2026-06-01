@@ -74,7 +74,7 @@
 .hero-copy {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   min-height: 520px;
   padding: 28px;
   border: 1px solid var(--line);
@@ -177,6 +177,16 @@
     linear-gradient(var(--surface-solid), var(--surface-solid)) padding-box,
     var(--gradient-border) border-box;
   box-shadow: var(--shadow);
+}
+
+.transfer-card {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+}
+
+.transfer-card .dropzone {
+  min-height: 258px;
 }
 
 .card-head {
@@ -432,6 +442,24 @@
     radial-gradient(circle at 88% 12%, rgba(245, 197, 24, 0.1), transparent 32%);
 }
 
+.transfer-lookup {
+  max-width: none;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 18px 0 0;
+}
+
+[data-theme="dark"] .transfer-lookup {
+  box-shadow: none;
+}
+
+.transfer-lookup::before {
+  display: none;
+}
+
 .lookup-head { position: relative; display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
 .lookup-head .eyebrow { margin-bottom: 4px; color: var(--muted); }
 .lookup-head h2 { margin: 0; font-size: 24px; letter-spacing: 0; color: var(--ink); }
@@ -502,12 +530,12 @@
 .site-footer a:hover { background: var(--btn-bg); color: var(--btn-color); }
 
 /* ─── Success Dialog ─── */
-.success-dialog { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 24px; }
+.success-dialog { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 24px; overflow-y: auto; }
 .dialog-backdrop { position: absolute; inset: 0; background: rgba(255, 255, 255, 0.72); backdrop-filter: blur(18px); }
 [data-theme="dark"] .dialog-backdrop { background: rgba(10, 10, 15, 0.85); }
 
 .dialog-panel {
-  position: relative; width: min(640px, 100%); border: 1px solid transparent; border-radius: 8px;
+  position: relative; width: min(640px, 100%); max-height: calc(100dvh - 48px); overflow-y: auto; overscroll-behavior: contain; border: 1px solid transparent; border-radius: 8px;
   background: linear-gradient(var(--surface-solid), var(--surface-solid)) padding-box, var(--gradient-border) border-box;
   box-shadow: 0 30px 110px rgba(0, 0, 0, 0.18); padding: 24px; animation: dialogIn 260ms ease-out;
 }
@@ -524,6 +552,8 @@
 .option-row div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
 .option-row input { min-width: 0; height: 40px; border: 1px solid var(--input-border); border-radius: 6px; background: var(--input-bg); padding: 0 12px; color: var(--ink); font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; font-size: 13px; }
 .option-row button, .qr-section a { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; border: 1px solid var(--btn-bg); border-radius: 6px; background: var(--btn-bg); color: var(--btn-color); padding: 0 12px; text-decoration: none; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.dialog-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.qr-section a.whatsapp-share { border-color: #1fa855; background: #1fa855; color: #ffffff; }
 
 .qr-section { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 16px; align-items: center; margin-top: 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--card-inner); padding: 14px; }
 .qr-section img { width: 132px; height: 132px; border: 1px solid var(--line); border-radius: 8px; background: #ffffff; padding: 8px; }
@@ -549,9 +579,15 @@
   .hero, .benefit-grid, .seo-content, .faq-section, .related-searches, .site-footer { width: calc(100% - 32px); }
   .app-shell h1 { font-size: 42px; }
   .dropzone { min-height: 270px; }
+  .success-dialog { place-items: start center; padding: 12px; }
+  .dialog-panel { max-height: calc(100dvh - 24px); padding: 18px; }
+  .dialog-panel h2 { margin-right: 28px; font-size: 28px; }
+  .dialog-status { width: 44px; height: 44px; margin-bottom: 12px; }
+  .dialog-status::after { left: 15px; top: 11px; width: 12px; height: 20px; }
   .result-box, .lookup-form { align-items: stretch; flex-direction: column; }
   .option-row div, .qr-section { grid-template-columns: 1fr; }
-  .qr-section img { width: 150px; height: 150px; }
+  .dialog-actions { display: grid; grid-template-columns: 1fr; }
+  .qr-section img { width: 112px; height: 112px; }
   .benefit-grid { grid-template-columns: 1fr; }
   .faq-list { grid-template-columns: 1fr; }
   .related-grid { grid-template-columns: 1fr; }

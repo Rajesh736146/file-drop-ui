@@ -2,9 +2,9 @@
 const { active = '' } = Astro.props;
 ---
 <header class="topbar">
-  <a class="brand" href="/" aria-label="Onlne File Share home">
+  <a class="brand" href="/" aria-label="Online File Share home">
     <img class="brand-mark" src="/favicon.svg" alt="" width="24" height="24" />
-    <span>Onlne File Share</span>
+    <span>Online File Share</span>
   </a>
   <div class="topbar-right">
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">
@@ -25,6 +25,7 @@ const { active = '' } = Astro.props;
     display: flex;
     align-items: center;
     gap: 8px;
+    min-width: 0;
   }
 
   .theme-toggle {
@@ -52,4 +53,30 @@ const { active = '' } = Astro.props;
   /* Dark mode: show sun (click to go light), hide moon */
   :global([data-theme="dark"]) .icon-sun { display: block; }
   :global([data-theme="dark"]) .icon-moon { display: none; }
+
+  @media (max-width: 640px) {
+    .topbar-right {
+      display: contents;
+    }
+
+    .theme-toggle {
+      grid-column: 2;
+      grid-row: 1;
+      justify-self: end;
+    }
+
+    .top-actions {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      width: 100%;
+      min-width: 0;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+
+    .top-actions::-webkit-scrollbar {
+      display: none;
+    }
+  }
 </style>
