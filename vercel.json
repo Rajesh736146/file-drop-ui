@@ -2,8 +2,8 @@
   "redirects": [
     {
       "source": "/:path(.*)",
-      "has": [{ "type": "host", "value": "www.onlnefileshare.com" }],
-      "destination": "https://onlnefileshare.com/:path",
+      "has": [{ "type": "host", "value": "www.onlinefiledrop.com" }],
+      "destination": "https://onlinefiledrop.com/:path",
       "permanent": true
     }
   ]

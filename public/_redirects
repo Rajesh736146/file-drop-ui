@@ -1,2 +1,2 @@
 # Redirect www to non-www (301 permanent)
-https://www.onlnefileshare.com/* https://onlnefileshare.com/:splat 301
+https://www.onlinefiledrop.com/* https://onlinefiledrop.com/:splat 301
